@@ -1,7 +1,6 @@
-package dev.said.config.security;
+package dev.said.config.openapi;
 
 import io.swagger.v3.oas.models.Components;
-import io.swagger.v3.oas.models.ExternalDocumentation;
 import io.swagger.v3.oas.models.OpenAPI;
 import io.swagger.v3.oas.models.info.Contact;
 import io.swagger.v3.oas.models.info.Info;
@@ -47,11 +46,11 @@ public class SwaggerConfig {
 //                                        .type(SecurityScheme.Type.HTTP)
 //                                        .scheme("bearer")
 //                                        .bearerFormat("JWT"))
-                        .addSecuritySchemes("basicAuth",
-                                new SecurityScheme()
-                                        .name("basicAuth")
-                                        .type(SecurityScheme.Type.HTTP)
-                                        .scheme("basic"))
+                                .addSecuritySchemes("basicAuth",
+                                        new SecurityScheme()
+                                                .name("basicAuth")
+                                                .type(SecurityScheme.Type.HTTP)
+                                                .scheme("basic"))
                 );
 
     }
@@ -67,94 +66,35 @@ public class SwaggerConfig {
     }
 
     @Bean
-    public GroupedOpenApi user() {
+    public GroupedOpenApi auth() {
         return GroupedOpenApi.builder()
-                .group("user")
+                .group("auth")
                 .pathsToMatch(
                         "/api/v1/auth/**"
                 )
                 .build();
     }
 
-//    @Bean
-//    public GroupedOpenApi comment() {
-//        return GroupedOpenApi.builder()
-//                .group("comment")
-//                .pathsToMatch(
-//                        "/api/v1/comment/**"
-//                )
-//                .build();
-//    }
-//
-//    @Bean
-//    public GroupedOpenApi document() {
-//        return GroupedOpenApi.builder()
-//                .group("document")
-//                .pathsToMatch(
-//                        "/api/v1/document/**"
-//                )
-//                .build();
-//    }
-//
-//    @Bean
-//    public GroupedOpenApi follow() {
-//        return GroupedOpenApi.builder()
-//                .group("follow")
-//                .pathsToMatch(
-//                        "/api/v1/follows/**"
-//                )
-//                .build();
-//    }
-//
-//
-//    @Bean
-//    public GroupedOpenApi post() {
-//        return GroupedOpenApi.builder()
-//                .group("post")
-//                .pathsToMatch(
-//                        "/api/v1/post/**"
-//                )
-//                .build();
-//    }
-//
-//    @Bean
-//    public GroupedOpenApi saved() {
-//        return GroupedOpenApi.builder()
-//                .group("saved")
-//                .pathsToMatch(
-//                        "/api/v1/saved/**"
-//                )
-//                .build();
-//    }
-//
-//    @Bean
-//    public GroupedOpenApi location() {
-//        return GroupedOpenApi.builder()
-//                .group("location")
-//                .pathsToMatch(
-//                        "/api/v1/location/**"
-//                )
-//                .build();
-//    }
-//
-//    @Bean
-//    public GroupedOpenApi notification() {
-//        return GroupedOpenApi.builder()
-//                .group("notification")
-//                .pathsToMatch(
-//                        "/api/v1/notification/**"
-//                )
-//                .build();
-//    }
-//
-//    @Bean
-//    public GroupedOpenApi mailing() {
-//        return GroupedOpenApi.builder()
-//                .group("mailing")
-//                .pathsToMatch(
-//                        "/api/v1/mail/**"
-//                )
-//                .build();
-//    }
+    @Bean
+    public GroupedOpenApi user() {
+        return GroupedOpenApi.builder()
+                .group("user")
+                .pathsToMatch(
+                        "/api/v1/user/**"
+                )
+                .build();
+    }
+
+    @Bean
+    public GroupedOpenApi admin() {
+        return GroupedOpenApi.builder()
+                .group("admin")
+                .pathsToMatch(
+                        "/api/v1/admin/**"
+                )
+                .build();
+    }
+
+
 }
 

@@ -1,4 +1,4 @@
-package dev.said.config.security;
+package dev.said.config.jwt;
 
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;

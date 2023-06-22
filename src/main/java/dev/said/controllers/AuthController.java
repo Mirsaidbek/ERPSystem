@@ -1,6 +1,5 @@
 package dev.said.controllers;
 
-
 import dev.said.config.security.UserDetailsService;
 import dev.said.dto.auth.CreateAuthUserDTO;
 import dev.said.dto.auth.ResetPasswordDTO;
@@ -47,11 +46,10 @@ public class AuthController {
 
     @PutMapping("/reset-password")
     public ResponseEntity<String> resetPassword(
-           @NonNull ResetPasswordDTO dto
+            @NonNull ResetPasswordDTO dto
     ) {
         return ResponseEntity.ok(authService.resetPassword(dto));
     }
-
 
 
     @PostMapping("/logout")

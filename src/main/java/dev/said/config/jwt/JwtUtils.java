@@ -1,4 +1,4 @@
-package dev.said.config.security;
+package dev.said.config.jwt;
 
 import dev.said.dto.token.TokenResponse;
 import dev.said.enums.TokenType;

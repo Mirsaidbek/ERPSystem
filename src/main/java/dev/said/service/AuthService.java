@@ -1,7 +1,6 @@
 package dev.said.service;
 
-import dev.said.config.security.JwtUtils;
-import dev.said.config.security.SessionUser;
+import dev.said.config.jwt.JwtUtils;
 import dev.said.domains.AuthUser;
 import dev.said.dto.auth.CreateAuthUserDTO;
 import dev.said.dto.auth.ResetPasswordDTO;

@@ -1,4 +1,4 @@
-package dev.said.config;
+package dev.said.handlers;
 
 import dev.said.dto.AppErrorDTO;
 import jakarta.servlet.http.HttpServletRequest;
@@ -35,7 +35,7 @@ public class GlobalExceptionHandler {
     }
 
     @ExceptionHandler(UsernameNotFoundException.class)
-    public ResponseEntity<AppErrorDTO> usernameNotFoundException( HttpServletRequest request, UsernameNotFoundException e) {
+    public ResponseEntity<AppErrorDTO> usernameNotFoundException(HttpServletRequest request, UsernameNotFoundException e) {
         String errorBody = e.getMessage();
         String errorPath = request.getRequestURI();
         AppErrorDTO errorDTO = new AppErrorDTO(errorPath, null, errorBody, 500);
