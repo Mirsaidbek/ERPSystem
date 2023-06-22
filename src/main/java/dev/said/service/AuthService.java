@@ -37,10 +37,8 @@ public class AuthService {
                 .orElseThrow();
         TokenResponse tokenResponse = jwtUtils.generateToken(user.getUsername());
 
-        return new GetTokenDTO(tokenResponse.getAccessToken());
-
-//        return GetTokenDTO.builder()
-//                .token(tokenResponse.getAccessToken())
-//                .build();
+        return GetTokenDTO.builder()
+                .token(tokenResponse.getAccessToken())
+                .build();
     }
 }

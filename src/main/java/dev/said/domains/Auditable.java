@@ -10,11 +10,11 @@ import org.springframework.data.annotation.LastModifiedBy;
 import java.io.Serializable;
 import java.time.LocalDateTime;
 
-//@Getter
-//@Setter
-//@NoArgsConstructor
+@Getter
+@Setter
+@NoArgsConstructor
 @ToString
-//@Builder
+@Builder
 @MappedSuperclass
 public class Auditable<ID extends Serializable> {
     @Id
@@ -35,8 +35,6 @@ public class Auditable<ID extends Serializable> {
     @Column(columnDefinition = "boolean default 'f'")
     private boolean deleted;
 
-    public Auditable() {
-    }
 
     public Auditable(ID id, LocalDateTime createdAt, LocalDateTime updatedAt, ID createdBy, ID updatedBy, boolean deleted) {
         this.id = id;
@@ -44,54 +42,6 @@ public class Auditable<ID extends Serializable> {
         this.updatedAt = updatedAt;
         this.createdBy = createdBy;
         this.updatedBy = updatedBy;
-        this.deleted = deleted;
-    }
-
-    public ID getId() {
-        return id;
-    }
-
-    public void setId(ID id) {
-        this.id = id;
-    }
-
-    public LocalDateTime getCreatedAt() {
-        return createdAt;
-    }
-
-    public void setCreatedAt(LocalDateTime createdAt) {
-        this.createdAt = createdAt;
-    }
-
-    public LocalDateTime getUpdatedAt() {
-        return updatedAt;
-    }
-
-    public void setUpdatedAt(LocalDateTime updatedAt) {
-        this.updatedAt = updatedAt;
-    }
-
-    public ID getCreatedBy() {
-        return createdBy;
-    }
-
-    public void setCreatedBy(ID createdBy) {
-        this.createdBy = createdBy;
-    }
-
-    public ID getUpdatedBy() {
-        return updatedBy;
-    }
-
-    public void setUpdatedBy(ID updatedBy) {
-        this.updatedBy = updatedBy;
-    }
-
-    public boolean isDeleted() {
-        return deleted;
-    }
-
-    public void setDeleted(boolean deleted) {
         this.deleted = deleted;
     }
 }

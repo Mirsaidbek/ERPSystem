@@ -52,15 +52,11 @@ public class UserDetailsService implements org.springframework.security.core.use
         }
         String username = jwtUtils.getUsername(refreshToken, TokenType.REFRESH);
         authUserRepository.findAuthIdByUsername(username);
-        return new TokenResponse(
-                refreshToken,
-                jwtUtils.getExpiry(refreshToken, TokenType.REFRESH)
-        );
 
-//        return TokenResponse.builder()
-//        .refreshToken(refreshToken)
-//        .refreshTokenExpiry(jwtUtils.getExpiry(refreshToken, TokenType.REFRESH))
-//        .build();
+        return TokenResponse.builder()
+                .refreshToken(refreshToken)
+                .refreshTokenExpiry(jwtUtils.getExpiry(refreshToken, TokenType.REFRESH))
+                .build();
 
     }
 }

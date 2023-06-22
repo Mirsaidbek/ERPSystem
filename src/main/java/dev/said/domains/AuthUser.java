@@ -12,9 +12,9 @@ import lombok.*;
 import java.time.LocalDateTime;
 
 @Entity
-//@Getter
-//@Setter
-//@NoArgsConstructor
+@Getter
+@Setter
+@NoArgsConstructor
 @ToString(callSuper = true)
 public class AuthUser extends Auditable<Long> {
 
@@ -25,16 +25,13 @@ public class AuthUser extends Auditable<Long> {
 
     @Enumerated(EnumType.STRING)
     private Language language;
-    @Enumerated(EnumType.ORDINAL)
+    @Enumerated(EnumType.STRING)
     private Active active;
     @Enumerated(EnumType.STRING)
     private Role role;
 
 
-    public AuthUser() {
-    }
-
-//    @Builder(builderMethodName = "childBuilder")
+    @Builder(builderMethodName = "childBuilder")
     public AuthUser(Long id, LocalDateTime createdAt, LocalDateTime updatedAt, Long createdBy, Long updatedBy, boolean deleted, String username, String password, Language language, Role role, Active active) {
         super(id, createdAt, updatedAt, createdBy, updatedBy, deleted);
         this.username = username;
@@ -44,47 +41,4 @@ public class AuthUser extends Auditable<Long> {
         this.active = active;
     }
 
-    public Long getId() {
-        return super.getId();
-    }
-
-    public String getUsername() {
-        return username;
-    }
-
-    public void setUsername(String username) {
-        this.username = username;
-    }
-
-    public String getPassword() {
-        return password;
-    }
-
-    public void setPassword(String password) {
-        this.password = password;
-    }
-
-    public Language getLanguage() {
-        return language;
-    }
-
-    public void setLanguage(Language language) {
-        this.language = language;
-    }
-
-    public Active getActive() {
-        return active;
-    }
-
-    public void setActive(Active active) {
-        this.active = active;
-    }
-
-    public Role getRole() {
-        return role;
-    }
-
-    public void setRole(Role role) {
-        this.role = role;
-    }
 }
