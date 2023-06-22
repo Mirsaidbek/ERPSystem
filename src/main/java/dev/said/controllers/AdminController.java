@@ -9,6 +9,7 @@ import lombok.RequiredArgsConstructor;
 import org.springdoc.core.annotations.ParameterObject;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -24,10 +25,17 @@ public class AdminController {
     }
 
     @PostMapping("/add-user")
-    public ResponseEntity<User> addUser(
+    public ResponseEntity<AuthUser> addUser(
             @NonNull @ParameterObject CreateAuthUserDTO dto
     ) {
         return ResponseEntity.ok(adminService.addUser(dto));
+    }
+
+    @PutMapping("/edit-auth-user")
+    public ResponseEntity<AuthUser> editUser(
+            @NonNull @ParameterObject CreateAuthUserDTO dto
+    ) {
+        return ResponseEntity.ok(adminService.editUser(dto));
     }
 
 }
