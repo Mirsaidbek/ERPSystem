@@ -2,9 +2,9 @@ package dev.said.service;
 
 import dev.said.config.security.JwtUtils;
 import dev.said.domains.AuthUser;
-import dev.said.dto.CreateAuthUserDTO;
-import dev.said.dto.GetTokenDTO;
-import dev.said.dto.TokenResponse;
+import dev.said.dto.auth.CreateAuthUserDTO;
+import dev.said.dto.token.GetTokenDTO;
+import dev.said.dto.token.TokenResponse;
 import dev.said.repository.AuthUserRepository;
 import org.springframework.context.annotation.Lazy;
 import org.springframework.security.authentication.AuthenticationManager;

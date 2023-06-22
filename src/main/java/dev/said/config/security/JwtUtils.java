@@ -1,6 +1,6 @@
 package dev.said.config.security;
 
-import dev.said.dto.TokenResponse;
+import dev.said.dto.token.TokenResponse;
 import dev.said.enums.TokenType;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;

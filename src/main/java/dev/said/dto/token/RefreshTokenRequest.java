@@ -1,4 +1,4 @@
-package dev.said.dto;
+package dev.said.dto.token;
 
 import jakarta.validation.constraints.NotBlank;
 

@@ -1,4 +1,4 @@
-package dev.said.dto;
+package dev.said.dto.auth;
 
 import jakarta.validation.constraints.NotBlank;
 import lombok.NonNull;

@@ -1,5 +1,8 @@
 package dev.said.domains;
 
+import dev.said.enums.Active;
+import dev.said.enums.Language;
+import dev.said.enums.Role;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.EnumType;
@@ -9,9 +12,9 @@ import lombok.*;
 import java.time.LocalDateTime;
 
 @Entity
-@Getter
-@Setter
-@NoArgsConstructor
+//@Getter
+//@Setter
+//@NoArgsConstructor
 @ToString(callSuper = true)
 public class AuthUser extends Auditable<Long> {
 
@@ -27,19 +30,11 @@ public class AuthUser extends Auditable<Long> {
     @Enumerated(EnumType.STRING)
     private Role role;
 
-    public enum Language {
-        ENGLISH, UZBEK, RUSSIAN
+
+    public AuthUser() {
     }
 
-    public enum Active {
-        BLOCKED, ACTIVE
-    }
-
-    public enum Role {
-        USER, ADMIN
-    }
-
-    @Builder(builderMethodName = "childBuilder")
+//    @Builder(builderMethodName = "childBuilder")
     public AuthUser(Long id, LocalDateTime createdAt, LocalDateTime updatedAt, Long createdBy, Long updatedBy, boolean deleted, String username, String password, Language language, Role role, Active active) {
         super(id, createdAt, updatedAt, createdBy, updatedBy, deleted);
         this.username = username;
@@ -47,6 +42,10 @@ public class AuthUser extends Auditable<Long> {
         this.language = language;
         this.role = role;
         this.active = active;
+    }
+
+    public Long getId() {
+        return super.getId();
     }
 
     public String getUsername() {

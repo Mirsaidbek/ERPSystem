@@ -1,4 +1,4 @@
-package dev.said.dto;
+package dev.said.dto.token;
 
 
 import lombok.*;
@@ -7,7 +7,7 @@ import java.util.Date;
 
 @Getter
 @Setter
-@Builder
+//@Builder
 public class TokenResponse {
     private String accessToken;
     private Date accessTokenExpiry;
@@ -19,6 +19,11 @@ public class TokenResponse {
 
     public TokenResponse(Date accessTokenExpiry, Date refreshTokenExpiry) {
         this.accessTokenExpiry = accessTokenExpiry;
+        this.refreshTokenExpiry = refreshTokenExpiry;
+    }
+
+    public TokenResponse(String refreshToken, Date refreshTokenExpiry) {
+        this.refreshToken = refreshToken;
         this.refreshTokenExpiry = refreshTokenExpiry;
     }
 

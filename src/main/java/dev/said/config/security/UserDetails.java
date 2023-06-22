@@ -1,6 +1,7 @@
 package dev.said.config.security;
 
 import dev.said.domains.AuthUser;
+import dev.said.enums.Active;
 import lombok.Getter;
 import org.springframework.lang.NonNull;
 import org.springframework.security.core.GrantedAuthority;
@@ -53,7 +54,7 @@ public class UserDetails implements org.springframework.security.core.userdetail
 
     @Override
     public boolean isEnabled() {
-        return authUser.getActive().equals(AuthUser.Active.ACTIVE);
+        return authUser.getActive().equals(Active.ACTIVE);
     }
 
     public Long getId() {

@@ -1,4 +1,4 @@
-package dev.said.dto;
+package dev.said.dto.token;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -8,7 +8,7 @@ import lombok.NoArgsConstructor;
 @Data
 //@AllArgsConstructor
 //@NoArgsConstructor
-@Builder
+//@Builder
 public class GetTokenDTO {
     private String token;
 

@@ -41,12 +41,12 @@ public class SwaggerConfig {
                         .addList("bearerAuth")
                         .addList("basicAuth"))
                 .components(new Components()
-                        .addSecuritySchemes("bearerAuth",
-                                new SecurityScheme()
-                                        .name("bearerAuth")
-                                        .type(SecurityScheme.Type.HTTP)
-                                        .scheme("bearer")
-                                        .bearerFormat("JWT"))
+//                        .addSecuritySchemes("bearerAuth",
+//                                new SecurityScheme()
+//                                        .name("bearerAuth")
+//                                        .type(SecurityScheme.Type.HTTP)
+//                                        .scheme("bearer")
+//                                        .bearerFormat("JWT"))
                         .addSecuritySchemes("basicAuth",
                                 new SecurityScheme()
                                         .name("basicAuth")
