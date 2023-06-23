@@ -1,57 +1,127 @@
 package dev.said.config.security;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
 import dev.said.config.jwt.JwtFilter;
+import dev.said.config.jwt.JwtUtils;
+import dev.said.dto.AppErrorDTO;
+import dev.said.repository.AuthUserRepository;
+import jakarta.servlet.ServletOutputStream;
+import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.data.domain.AuditorAware;
+import org.springframework.data.jpa.repository.config.EnableJpaAuditing;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.AuthenticationProvider;
 import org.springframework.security.authentication.dao.DaoAuthenticationProvider;
 import org.springframework.security.config.annotation.authentication.configuration.AuthenticationConfiguration;
+import org.springframework.security.config.annotation.method.configuration.EnableMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.http.SessionCreationPolicy;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
-import org.springframework.security.web.SecurityFilterChain;
-import org.springframework.security.config.annotation.web.configurers.AbstractHttpConfigurer;
-import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.security.web.AuthenticationEntryPoint;
+import org.springframework.security.web.SecurityFilterChain;
+import org.springframework.security.web.access.AccessDeniedHandler;
+import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
+import org.springframework.web.cors.CorsConfiguration;
+import org.springframework.web.cors.CorsConfigurationSource;
+import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
 
-@EnableWebSecurity
+import java.util.Collections;
+import java.util.List;
+import java.util.Optional;
+
 @Configuration
+@EnableWebSecurity
+@EnableJpaAuditing(auditorAwareRef = "auditorAware")
+@EnableMethodSecurity
+@RequiredArgsConstructor
 public class SecurityConfigurer {
-    private final JwtFilter jwtFilter;
-    private final UserDetailsService userDetailsService;
 
-    public SecurityConfigurer(JwtFilter jwtFilter, UserDetailsService userDetailsService) {
-        this.jwtFilter = jwtFilter;
-        this.userDetailsService = userDetailsService;
-    }
+    private final AuthUserRepository authUserRepository;
+    private final ObjectMapper objectMapper;
+    private final JwtUtils jwtUtils;
+    private final SessionUser sessionUser;
+
 
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
-        return http.csrf(AbstractHttpConfigurer::disable)
-                .authorizeHttpRequests(httpReq -> httpReq
-                        .requestMatchers("/api/v1/auth/token/**",
-                                "/swagger-ui.html",
-                                "/swagger-ui/**",
-                                "/**",
-                                "/api-docs")
-                        .permitAll()
-                        .anyRequest()
-                        .authenticated()
+        return http
+                .cors().configurationSource(corsConfigurationSource())
+                .and()
+                .csrf().disable()
+                .authorizeHttpRequests()
+                .requestMatchers(
+//                        "/swagger-ui.html",
+//                        "/swagger-ui*/**",
+//                        "/swagger-ui*/*swagger-initializer.js",
+//                        "/v3/api-docs*/**",
+//                        "/actuator/health*/**",
+//                        "/api/v1/auth/**",
+//                        "/actuator",
+//                        "/error",
+//                        "/webjars/**",
+                        "/**"
                 )
-                .sessionManagement(sessionManagement -> sessionManagement
-                        .sessionCreationPolicy(SessionCreationPolicy.STATELESS))
-                .authenticationProvider(authenticationProvider())
-                .addFilterBefore(jwtFilter, UsernamePasswordAuthenticationFilter.class)
+                .permitAll()
+                .anyRequest()
+                .fullyAuthenticated()
+                .and()
+                .sessionManagement()
+                .sessionCreationPolicy(SessionCreationPolicy.STATELESS)
+                .and()
+                .exceptionHandling()
+                .authenticationEntryPoint(authenticationEntryPoint())
+                .accessDeniedHandler(accessDeniedHandler())
+                .and()
+                .addFilterBefore(new JwtFilter(jwtUtils, userDetailsService()), UsernamePasswordAuthenticationFilter.class)
                 .build();
+
+//                .sessionManagement(sessionManagement -> sessionManagement
+//                        .sessionCreationPolicy(SessionCreationPolicy.STATELESS))
+//                .authenticationProvider(authenticationProvider())
+//                .addFilterBefore(new JwtFilter(jwtUtils, userDetailsService()), UsernamePasswordAuthenticationFilter.class)
+//                .build();
     }
+
+    @Bean
+    public AuthenticationEntryPoint authenticationEntryPoint() {
+        return (request, response, authException) -> {
+            authException.printStackTrace();
+            String errorPath = request.getRequestURI();
+            String errorMessage = authException.getMessage();
+            int errorCode = 401;
+            AppErrorDTO appErrorDto = new AppErrorDTO(errorMessage, errorPath, errorCode);
+            response.setStatus(errorCode);
+            ServletOutputStream outputStream = response.getOutputStream();
+            objectMapper.writeValue(outputStream, appErrorDto);
+        };
+    }
+
+    @Bean
+    public AccessDeniedHandler accessDeniedHandler() {
+        return (request, response, accessDeniedException) -> {
+            accessDeniedException.printStackTrace();
+            String errorPath = request.getRequestURI();
+            String errorMessage = accessDeniedException.getMessage();
+            int errorCode = 403;
+            AppErrorDTO appErrorDto = new AppErrorDTO(errorMessage, errorPath, errorCode);
+            response.setStatus(errorCode);
+            ServletOutputStream outputStream = response.getOutputStream();
+            objectMapper.writeValue(outputStream, appErrorDto);
+        };
+    }
+
 
     @Bean
     public AuthenticationProvider authenticationProvider() {
         DaoAuthenticationProvider provider = new DaoAuthenticationProvider();
         provider.setPasswordEncoder(passwordEncoder());
-        provider.setUserDetailsService(userDetailsService);
+        provider.setUserDetailsService(userDetailsService());
         return provider;
     }
 
@@ -63,5 +133,37 @@ public class SecurityConfigurer {
     @Bean
     public PasswordEncoder passwordEncoder() {
         return new BCryptPasswordEncoder();
+    }
+
+    @Bean
+    public CorsConfigurationSource corsConfigurationSource() {
+        CorsConfiguration configuration = new CorsConfiguration();
+
+        configuration.setAllowedOriginPatterns(Collections.singletonList("*"));
+        configuration.setAllowedHeaders(List.of("*"));
+        configuration.setAllowedMethods(List.of(
+                "GET", "POST", "DELETE", "PUT"
+        ));
+
+        UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
+        source.registerCorsConfiguration("/**", configuration);
+        return source;
+    }
+
+
+    @Bean
+    public org.springframework.security.core.userdetails.UserDetailsService userDetailsService() {
+        return authUserRepository::findByUsernameforConfig;
+    }
+
+    @Bean
+    AuditorAware<Long> auditorAware() {
+        return () -> {
+            Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+            if (authentication == null || !authentication.isAuthenticated()) {
+                return Optional.empty();
+            }
+            return Optional.of(sessionUser.id());
+        };
     }
 }

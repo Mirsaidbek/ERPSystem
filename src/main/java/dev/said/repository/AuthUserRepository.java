@@ -8,15 +8,18 @@ import jakarta.transaction.Transactional;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
+import org.springframework.stereotype.Repository;
 
 import java.util.Optional;
 
-public interface AuthUserRepository extends JpaRepository<AuthUser, Integer> {
+
+@Repository
+public interface AuthUserRepository extends JpaRepository<AuthUser, Long> {
     @Query("select a from AuthUser a where upper(a.username) = upper(?1)")
     Optional<AuthUser> findByUsername(String username);
 
     @Query("select a from AuthUser a where upper(a.username) = upper(?1)")
-    AuthUser findByUsername2(String username);
+    AuthUser findByUsernameforConfig(String username);
 
     @Query("select a.id from AuthUser a where a.username = ?1")
     Long findAuthIdByUsername(String username);
@@ -25,4 +28,5 @@ public interface AuthUserRepository extends JpaRepository<AuthUser, Integer> {
     @Modifying
     @Query("update AuthUser a set a.language = coalesce(?2,a.language), a.active = coalesce(?3,a.active), a.role = coalesce(?4,a.role) where a.username = ?1")
     void updateAuthUser(String username, Language language, Active active, Role role);
+
 }

@@ -1,6 +1,5 @@
 package dev.said;
 
-
 import dev.said.config.security.SessionUser;
 import io.swagger.v3.oas.annotations.OpenAPIDefinition;
 import io.swagger.v3.oas.annotations.enums.SecuritySchemeType;
@@ -29,5 +28,5 @@ public class Main {
     }
 }
 
-// TODO: 22.06.2023 Change the entire logic of the application
 // TODO: 22.06.2023 Redo the security part - because it is working incorrectly
+// TODO: 23.06.2023  Security is working incorrectly - must be corrected

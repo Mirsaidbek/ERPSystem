@@ -26,7 +26,6 @@ public class JwtUtils {
     @Value("${jwt.access.token.secret.key}")
     public String ACCESS_TOKEN_SECRET_KEY;
 
-
     @Value("${jwt.refresh.token.expiry}")
     private long refreshTokenExpiry;
 
@@ -45,7 +44,7 @@ public class JwtUtils {
         String refreshToken = Jwts.builder()
                 .setSubject(username)
                 .setIssuedAt(new Date())
-                .setIssuer("sheengo.live")
+                .setIssuer("google.com")
                 .setExpiration(tokenResponse.getRefreshTokenExpiry())
                 .signWith(signKey(REFRESH), SignatureAlgorithm.HS256)
                 .compact();
