@@ -28,3 +28,6 @@ public class Main {
         return () -> java.util.Optional.of(sessionUser == null ? -1L : sessionUser.id());
     }
 }
+
+// TODO: 22.06.2023 Change the entire logic of the application
+// TODO: 22.06.2023 Redo the security part - because it is working incorrectly

@@ -37,8 +37,8 @@ public class SwaggerConfig {
 //                        new Server().url("http://localhost:9090").description("Test-Server")
                 ))
                 .addSecurityItem(new SecurityRequirement()
-                        .addList("bearerAuth")
-                        .addList("basicAuth"))
+                        .addList("bearerAuth"))
+//                        .addList("basicAuth"))
                 .components(new Components()
 //                        .addSecuritySchemes("bearerAuth",
 //                                new SecurityScheme()

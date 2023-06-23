@@ -34,10 +34,10 @@ public class User {
     @Enumerated(EnumType.STRING)
     private MartialStatus martialStatus;
 
-    @Column(nullable = false)
+    @Column(nullable = false, unique = true)
     private String phoneNumber;
 
-    @Column(nullable = false)
+    @Column(nullable = false, unique = true)
     private String email;
 
     @Enumerated(EnumType.STRING)
