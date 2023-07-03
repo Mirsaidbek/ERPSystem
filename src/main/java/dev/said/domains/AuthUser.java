@@ -1,5 +1,6 @@
 package dev.said.domains;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import dev.said.enums.Active;
 import dev.said.enums.Language;
 import dev.said.enums.Role;
@@ -9,17 +10,24 @@ import jakarta.persistence.EnumType;
 import jakarta.persistence.Enumerated;
 import lombok.*;
 import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.Collection;
+import java.util.Collections;
+import java.util.Objects;
+
+import static org.apache.catalina.realm.UserDatabaseRealm.getRoles;
 
 @Entity
 @Getter
 @Setter
 @NoArgsConstructor
 @ToString(callSuper = true)
-public class AuthUser extends Auditable<Long> implements UserDetails {
+@JsonIgnoreProperties({"hibernateLazyInitializer", "handler"})
+public class AuthUser extends Auditable<Long>  {
 
     @Column(nullable = false, unique = true)
     private String username;
@@ -28,8 +36,10 @@ public class AuthUser extends Auditable<Long> implements UserDetails {
 
     @Enumerated(EnumType.STRING)
     private Language language;
-    @Enumerated(EnumType.STRING)
+
+    @Enumerated(EnumType.ORDINAL)
     private Active active;
+
     @Enumerated(EnumType.STRING)
     private Role role;
 
@@ -44,28 +54,4 @@ public class AuthUser extends Auditable<Long> implements UserDetails {
         this.active = active;
     }
 
-    @Override
-    public Collection<? extends GrantedAuthority> getAuthorities() {
-        return null;
-    }
-
-    @Override
-    public boolean isAccountNonExpired() {
-        return false;
-    }
-
-    @Override
-    public boolean isAccountNonLocked() {
-        return false;
-    }
-
-    @Override
-    public boolean isCredentialsNonExpired() {
-        return false;
-    }
-
-    @Override
-    public boolean isEnabled() {
-        return false;
-    }
 }

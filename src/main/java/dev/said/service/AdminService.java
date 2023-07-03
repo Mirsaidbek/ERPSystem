@@ -26,7 +26,7 @@ public class AdminService {
 
         AuthUser authUser = AuthUser.childBuilder()
                 .username(dto.email())
-                .password(passwordEncoder.encode(dto.firstName().concat("1234@")))
+                .password(passwordEncoder.encode(dto.firstName().concat("1234")))
                 .language(Language.UZBEK)
                 .active(Active.ACTIVE)
                 .role(Role.USER)
@@ -62,7 +62,8 @@ public class AdminService {
 
         authUserRepository.updateAuthUser(dto.username(), dto.language(), dto.active(), dto.role());
 
-        return authUserRepository.findByUsername(dto.username()).orElseThrow();
+        return authUserRepository.findByUsername(dto.username())
+                .orElseThrow(() -> new RuntimeException("User with given username: %s  not found".formatted(dto.username())));
     }
 
     public User updateUser(@NonNull CreateUserDTO dto) {
@@ -86,6 +87,7 @@ public class AdminService {
                 dto.reportingManagerId()
         );
 
-        return userRepository.findByEmailAndByFirstNameAndByLastName(dto.email(), dto.firstName(), dto.lastName()).orElseThrow();
+        return userRepository.findByEmailAndByFirstNameAndByLastName(dto.email(), dto.firstName(), dto.lastName())
+                .orElseThrow(()-> new RuntimeException("User with given email: %s, first name: %s and last name: %s  not found".formatted(dto.email(), dto.firstName(), dto.lastName())));
     }
 }

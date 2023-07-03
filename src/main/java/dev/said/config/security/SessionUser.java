@@ -21,7 +21,6 @@ public class SessionUser {
 
     public Long id() {
         UserDetails user = user();
-
         if (Objects.isNull(user))
             return -1L;
         return user.getId();

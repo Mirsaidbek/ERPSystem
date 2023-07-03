@@ -1,10 +1,13 @@
 package dev.said.dto.leaverequest;
 
-import dev.said.enums.leaverequest.LeaveRequestStatus;
 import dev.said.enums.leaverequest.LeaveRequestType;
 import lombok.NonNull;
 
 public record CreateLeaveRequestDTO(
+
+        @NonNull
+        Long employeeId,
+
         @NonNull
         LeaveRequestType leaveRequestType,
 
@@ -12,9 +15,7 @@ public record CreateLeaveRequestDTO(
         String startDate,
 
         @NonNull
-        String endDate,
+        String endDate
 
-        @NonNull
-        LeaveRequestStatus leaveRequestStatus
 ) {
 }

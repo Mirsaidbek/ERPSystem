@@ -1,5 +1,6 @@
 package dev.said.domains;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import dev.said.enums.EmploymentModel;
 import dev.said.enums.Gender;
 import dev.said.enums.MartialStatus;
@@ -7,13 +8,13 @@ import dev.said.enums.Role;
 import jakarta.persistence.*;
 import lombok.*;
 
-
 @Entity
 @Getter
 @Setter
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder
+@JsonIgnoreProperties({"hibernateLazyInitializer", "handler"})
 @Table(name = "users")
 public class User {
     @Id

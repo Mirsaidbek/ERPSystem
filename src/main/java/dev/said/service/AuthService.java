@@ -20,7 +20,7 @@ import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
-@Lazy
+//@Lazy
 @Service
 @RequiredArgsConstructor
 public class AuthService implements UserDetailsService {
@@ -65,19 +65,25 @@ public class AuthService implements UserDetailsService {
     }
 
 
-    public GetTokenDTO login(TokenRequest dto) {
+    public TokenResponse login(String username, String password) {
+
         authenticationManager.authenticate(
                 new UsernamePasswordAuthenticationToken(
-                        dto.username(),
-                        dto.password()
+                        username,
+                        password
                 )
         );
-        AuthUser user = authUserRepository.findByUsername(dto.username())
-                .orElseThrow();
+
+        AuthUser user = authUserRepository.findByUsername(username)
+                .orElseThrow(() -> new RuntimeException("Username or password not correct"));
+
         TokenResponse tokenResponse = jwtUtils.generateToken(user.getUsername());
 
-        return GetTokenDTO.builder()
-                .token(tokenResponse.getAccessToken())
+        return TokenResponse.builder()
+                .accessToken(tokenResponse.getAccessToken())
+                .accessTokenExpiry(tokenResponse.getAccessTokenExpiry())
+                .refreshToken(tokenResponse.getRefreshToken())
+                .refreshTokenExpiry(tokenResponse.getRefreshTokenExpiry())
                 .build();
     }
 

@@ -1,8 +1,8 @@
 package dev.said.config.security;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import dev.said.config.jwt.JwtFilter;
 import dev.said.config.jwt.JwtUtils;
+import dev.said.domains.AuthUser;
 import dev.said.dto.AppErrorDTO;
 import dev.said.repository.AuthUserRepository;
 import jakarta.servlet.ServletOutputStream;
@@ -15,18 +15,18 @@ import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.AuthenticationProvider;
 import org.springframework.security.authentication.dao.DaoAuthenticationProvider;
 import org.springframework.security.config.annotation.authentication.configuration.AuthenticationConfiguration;
-import org.springframework.security.config.annotation.method.configuration.EnableMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.core.userdetails.UserDetailsService;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.AuthenticationEntryPoint;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.access.AccessDeniedHandler;
-import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 import org.springframework.web.cors.CorsConfiguration;
 import org.springframework.web.cors.CorsConfigurationSource;
 import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
@@ -38,7 +38,6 @@ import java.util.Optional;
 @Configuration
 @EnableWebSecurity
 @EnableJpaAuditing(auditorAwareRef = "auditorAware")
-@EnableMethodSecurity
 @RequiredArgsConstructor
 public class SecurityConfigurer {
 
@@ -56,12 +55,12 @@ public class SecurityConfigurer {
                 .csrf().disable()
                 .authorizeHttpRequests()
                 .requestMatchers(
-//                        "/swagger-ui.html",
-//                        "/swagger-ui*/**",
-//                        "/swagger-ui*/*swagger-initializer.js",
+                        "/swagger-ui.html",
+                        "/swagger-ui*/**",
+                        "/swagger-ui*/*swagger-initializer.js",
 //                        "/v3/api-docs*/**",
 //                        "/actuator/health*/**",
-//                        "/api/v1/auth/**",
+                        "/api/v1/auth/**",
 //                        "/actuator",
 //                        "/error",
 //                        "/webjars/**",
@@ -78,14 +77,8 @@ public class SecurityConfigurer {
                 .authenticationEntryPoint(authenticationEntryPoint())
                 .accessDeniedHandler(accessDeniedHandler())
                 .and()
-                .addFilterBefore(new JwtFilter(jwtUtils, userDetailsService()), UsernamePasswordAuthenticationFilter.class)
-                .build();
-
-//                .sessionManagement(sessionManagement -> sessionManagement
-//                        .sessionCreationPolicy(SessionCreationPolicy.STATELESS))
-//                .authenticationProvider(authenticationProvider())
 //                .addFilterBefore(new JwtFilter(jwtUtils, userDetailsService()), UsernamePasswordAuthenticationFilter.class)
-//                .build();
+                .build();
     }
 
     @Bean
@@ -130,6 +123,11 @@ public class SecurityConfigurer {
         return authenticationConfiguration.getAuthenticationManager();
     }
 
+//    @Bean
+//    public AuthenticationManager authenticationManager() {
+//        return new ProviderManager(authenticationProvider());
+//    }
+
     @Bean
     public PasswordEncoder passwordEncoder() {
         return new BCryptPasswordEncoder();
@@ -152,8 +150,12 @@ public class SecurityConfigurer {
 
 
     @Bean
-    public org.springframework.security.core.userdetails.UserDetailsService userDetailsService() {
-        return authUserRepository::findByUsernameforConfig;
+    public UserDetailsService userDetailsService() {
+        return username -> {
+            AuthUser authUser = authUserRepository.findByUsername(username)
+                    .orElseThrow(() -> new UsernameNotFoundException("User not found: " + username));
+            return new UserDetails(authUser);
+        };
     }
 
     @Bean
