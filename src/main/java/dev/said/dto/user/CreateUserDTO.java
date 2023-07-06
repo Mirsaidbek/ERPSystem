@@ -1,6 +1,5 @@
 package dev.said.dto.user;
 
-
 import dev.said.enums.EmploymentModel;
 import dev.said.enums.Gender;
 import dev.said.enums.MartialStatus;

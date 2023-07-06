@@ -7,7 +7,6 @@ import org.springdoc.core.annotations.ParameterObject;
 @ParameterObject
 public record TokenRequest(
 
-
         @NotBlank String username,
 
         @NotBlank String password) {

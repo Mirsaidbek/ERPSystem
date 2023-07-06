@@ -6,7 +6,6 @@ import dev.said.enums.Role;
 import jakarta.validation.constraints.NotBlank;
 import lombok.NonNull;
 
-
 public record UpdateAuthUserDTO(
         @NonNull @NotBlank
         String username,

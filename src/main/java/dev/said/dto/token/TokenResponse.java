@@ -1,6 +1,5 @@
 package dev.said.dto.token;
 
-
 import lombok.*;
 
 import java.util.Date;

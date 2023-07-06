@@ -1,6 +1,7 @@
 package dev.said.config.security;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import dev.said.config.jwt.JwtFilter;
 import dev.said.config.jwt.JwtUtils;
 import dev.said.domains.AuthUser;
 import dev.said.dto.AppErrorDTO;
@@ -27,6 +28,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.AuthenticationEntryPoint;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.access.AccessDeniedHandler;
+import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 import org.springframework.web.cors.CorsConfiguration;
 import org.springframework.web.cors.CorsConfigurationSource;
 import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
@@ -43,8 +45,8 @@ public class SecurityConfigurer {
 
     private final AuthUserRepository authUserRepository;
     private final ObjectMapper objectMapper;
-    private final JwtUtils jwtUtils;
     private final SessionUser sessionUser;
+    private final JwtUtils jwtUtils;
 
 
     @Bean
@@ -58,12 +60,7 @@ public class SecurityConfigurer {
                         "/swagger-ui.html",
                         "/swagger-ui*/**",
                         "/swagger-ui*/*swagger-initializer.js",
-//                        "/v3/api-docs*/**",
-//                        "/actuator/health*/**",
                         "/api/v1/auth/**",
-//                        "/actuator",
-//                        "/error",
-//                        "/webjars/**",
                         "/**"
                 )
                 .permitAll()
@@ -77,7 +74,7 @@ public class SecurityConfigurer {
                 .authenticationEntryPoint(authenticationEntryPoint())
                 .accessDeniedHandler(accessDeniedHandler())
                 .and()
-//                .addFilterBefore(new JwtFilter(jwtUtils, userDetailsService()), UsernamePasswordAuthenticationFilter.class)
+                .addFilterBefore(new JwtFilter(jwtUtils, userDetailsService()), UsernamePasswordAuthenticationFilter.class)
                 .build();
     }
 
@@ -109,7 +106,6 @@ public class SecurityConfigurer {
         };
     }
 
-
     @Bean
     public AuthenticationProvider authenticationProvider() {
         DaoAuthenticationProvider provider = new DaoAuthenticationProvider();
@@ -122,11 +118,6 @@ public class SecurityConfigurer {
     public AuthenticationManager authenticationManager(AuthenticationConfiguration authenticationConfiguration) throws Exception {
         return authenticationConfiguration.getAuthenticationManager();
     }
-
-//    @Bean
-//    public AuthenticationManager authenticationManager() {
-//        return new ProviderManager(authenticationProvider());
-//    }
 
     @Bean
     public PasswordEncoder passwordEncoder() {
@@ -147,7 +138,6 @@ public class SecurityConfigurer {
         source.registerCorsConfiguration("/**", configuration);
         return source;
     }
-
 
     @Bean
     public UserDetailsService userDetailsService() {

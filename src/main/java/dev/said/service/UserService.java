@@ -1,6 +1,7 @@
 package dev.said.service;
 
 import dev.said.domains.AuthUser;
+import dev.said.domains.EnterOut;
 import dev.said.domains.LeaveRequest;
 import dev.said.domains.User;
 import dev.said.dto.leaverequest.UpdateLeaveRequestStatusDTO;
@@ -9,6 +10,7 @@ import dev.said.enums.Active;
 import dev.said.enums.Language;
 import dev.said.enums.Role;
 import dev.said.repository.AuthUserRepository;
+import dev.said.repository.EnterOutRepository;
 import dev.said.repository.LeaveRequestRepository;
 import dev.said.repository.UserRepository;
 import lombok.NonNull;
@@ -16,6 +18,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
+import java.time.Duration;
 import java.util.List;
 
 @Service
@@ -26,6 +29,7 @@ public class UserService {
     private final AuthUserRepository authUserRepository;
     private final UserRepository userRepository;
     private final LeaveRequestRepository leaveRequestRepository;
+    private final EnterOutRepository enterOutRepository;
 
     public User createEmployee(@NonNull CreateUserDTO dto) {
 
@@ -87,5 +91,76 @@ public class UserService {
     public List<User> findAll() {
         return userRepository.findAll();
     }
-    // TODO: 23.06.2023   updateLeaveRequestStatus() ishlidimi yomi tekshirish kere
+
+    public List<LeaveRequest> getListLeaveRequests() {
+
+        return leaveRequestRepository.findAll();
+    }
+
+    public String getWorkedTime(Long userId, String date) {
+
+        List<EnterOut> enterOuts = enterOutRepository.findEnterOutByUserIdAndDate(userId, date)
+                .orElseThrow(() -> new RuntimeException("user Id or date is not correct"));
+
+        Duration duration = null;
+        long hours = 0;
+        long minutes = 0;
+        long seconds = 0;
+
+        for (EnterOut obj : enterOuts) {
+            duration = Duration.between(obj.getEnteredAt(), obj.getLeftAt());
+            hours += duration.toHours();
+            minutes += duration.toMinutesPart();
+            seconds += duration.toSecondsPart();
+
+            System.out.println(obj.getId() + "=> " + "hours: " + duration.toHours() + ", minutes: " + duration.toMinutesPart() + ", seconds: " + duration.toSecondsPart());
+        }
+
+
+        hours = hours + (minutes / 60);
+        minutes = minutes + (seconds / 60);
+        seconds = seconds % 60;
+
+        System.out.println("==================================================================================");
+        System.out.println("==================================================================================");
+        System.out.println("            Worket tIme: " + hours + " hours " + minutes + " minutes " + seconds + " seconds");
+        System.out.println("==================================================================================");
+        System.out.println("==================================================================================");
+
+
+        return "worked time in " + date.substring(0, 10) + " is " + hours + " hours " + minutes + " minutes " + seconds + " seconds";
+    }
+
+
+    public String getWorkedTimeWithInterval(Long userId, String startDate, String endDate) {
+
+        List<EnterOut> enterOuts = enterOutRepository.findEnterOutByUserIdAndIntervalDate(userId, startDate, endDate)
+                .orElseThrow(() -> new RuntimeException("user Id or date is not correct"));
+
+        Duration duration = null;
+        long hours = 0;
+        long minutes = 0;
+        long seconds = 0;
+
+        for (EnterOut obj : enterOuts) {
+            duration = Duration.between(obj.getEnteredAt(), obj.getLeftAt());
+            hours += duration.toHours();
+            minutes += duration.toMinutesPart();
+            seconds += duration.toSecondsPart();
+        }
+
+        hours = hours + (minutes / 60);
+        minutes = minutes + (seconds / 60);
+        seconds = seconds % 60;
+
+        System.out.println("*******************************************************************************");
+        System.out.println("*******************************************************************************");
+        System.out.println("            Worket tIme: " + hours + " hours " + minutes + " minutes " + seconds + " seconds");
+        System.out.println("*******************************************************************************");
+        System.out.println("*******************************************************************************");
+
+
+        return "worked time between " + startDate.substring(0, 10) + " and " + endDate.substring(0, 10) + " is " + hours + " hours, " + minutes + " minutes, " + seconds + " seconds";
+    }
 }
+// TODO: 23.06.2023   updateLeaveRequestStatus() ishlidimi yomi tekshirish kere

@@ -1,5 +1,6 @@
 package dev.said.domains;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import dev.said.enums.leaverequest.LeaveRequestStatus;
 import dev.said.enums.leaverequest.LeaveRequestType;
 import jakarta.persistence.Column;
@@ -7,7 +8,6 @@ import jakarta.persistence.Entity;
 import jakarta.persistence.EnumType;
 import jakarta.persistence.Enumerated;
 import lombok.*;
-import org.hibernate.validator.constraints.CodePointLength;
 
 import java.time.LocalDateTime;
 
@@ -16,6 +16,8 @@ import java.time.LocalDateTime;
 @Setter
 @AllArgsConstructor
 @NoArgsConstructor
+@JsonIgnoreProperties({"hibernateLazyInitializer", "handler"})
+
 public class LeaveRequest extends Auditable<Long> {
     @Column(nullable = false)
     private Long employeeId;

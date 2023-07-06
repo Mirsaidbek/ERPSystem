@@ -1,9 +1,8 @@
 package dev.said.controllers;
 
-
 import dev.said.config.jwt.JwtUtils;
+import dev.said.domains.AuthUser;
 import dev.said.dto.auth.ResetPasswordDTO;
-import dev.said.dto.token.GetTokenDTO;
 import dev.said.dto.token.RefreshTokenRequest;
 import dev.said.dto.token.TokenRequest;
 import dev.said.dto.token.TokenResponse;
@@ -25,24 +24,20 @@ import org.springframework.web.bind.annotation.*;
 public class AuthController {
 
     private final AuthService authService;
-
     private final AuthenticationManager authenticationManager;
     private final UserDetailsService userDetailsService;
     private final JwtUtils jwtUtils;
 
-    //    @PreAuthorize("hasAnyRole('ROLE_ADMIN','ROLE_USER')")
     @GetMapping("/token")
     public ResponseEntity<TokenResponse> getToken(@Valid TokenRequest tokenRequest) {
         return ResponseEntity.ok(authService.generateToken(tokenRequest));
     }
 
-    //    @PreAuthorize("hasAnyRole('ROLE_ADMIN','ROLE_USER')")
     @PostMapping("/refresh")
     public ResponseEntity<TokenResponse> refresh(@Valid RefreshTokenRequest refreshTokenRequest) {
         return ResponseEntity.ok(authService.refreshToken(refreshTokenRequest));
     }
 
-    //    @PreAuthorize("hasAnyRole('ROLE_ADMIN','ROLE_USER')")
     @PostMapping("/login")
     public ResponseEntity<TokenResponse> login(
             @NonNull String username,
@@ -65,7 +60,7 @@ public class AuthController {
         return ResponseEntity.badRequest().body("Invalid username or password");
     }
 
-    @PreAuthorize("hasAnyRole('ROLE_ADMIN','ROLE_USER')")
+    @PreAuthorize("hasAnyRole('ROLE_ADMIN','ROLE_USER','ROLE_EMPLOYEE')")
     @PutMapping("/reset-password")
     public ResponseEntity<String> resetPassword(
             @NonNull ResetPasswordDTO dto
@@ -73,11 +68,11 @@ public class AuthController {
         return ResponseEntity.ok(authService.resetPassword(dto));
     }
 
-    @PreAuthorize("hasAnyRole('ROLE_ADMIN','ROLE_USER')")
+    @PreAuthorize("hasAnyRole('ROLE_ADMIN','ROLE_USER','ROLE_EMPLOYEE')")
     @PostMapping("/logout")
-    public ResponseEntity<Void> logout() {
-        return ResponseEntity.noContent().build();
+    public ResponseEntity<AuthUser> logout(
+            @RequestBody String username
+    ) {
+        return ResponseEntity.ok(authService.logout(username));
     }
-
-
 }

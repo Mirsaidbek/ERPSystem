@@ -9,17 +9,8 @@ import jakarta.persistence.Entity;
 import jakarta.persistence.EnumType;
 import jakarta.persistence.Enumerated;
 import lombok.*;
-import org.springframework.security.core.GrantedAuthority;
-import org.springframework.security.core.authority.SimpleGrantedAuthority;
-import org.springframework.security.core.userdetails.UserDetails;
 
 import java.time.LocalDateTime;
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.Collections;
-import java.util.Objects;
-
-import static org.apache.catalina.realm.UserDatabaseRealm.getRoles;
 
 @Entity
 @Getter
@@ -27,7 +18,7 @@ import static org.apache.catalina.realm.UserDatabaseRealm.getRoles;
 @NoArgsConstructor
 @ToString(callSuper = true)
 @JsonIgnoreProperties({"hibernateLazyInitializer", "handler"})
-public class AuthUser extends Auditable<Long>  {
+public class AuthUser extends Auditable<Long> {
 
     @Column(nullable = false, unique = true)
     private String username;

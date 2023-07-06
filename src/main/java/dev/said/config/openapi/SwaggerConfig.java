@@ -34,23 +34,15 @@ public class SwaggerConfig {
                         .termsOfService("http://swagger.io/terms/"))
                 .servers(List.of(
                         new Server().url("http://localhost:8080").description("Production-Server")
-//                        new Server().url("http://localhost:9090").description("Test-Server")
                 ))
                 .addSecurityItem(new SecurityRequirement()
                         .addList("bearerAuth"))
-//                        .addList("basicAuth"))
                 .components(new Components()
-//                        .addSecuritySchemes("bearerAuth",
-//                                new SecurityScheme()
-//                                        .name("bearerAuth")
-//                                        .type(SecurityScheme.Type.HTTP)
-//                                        .scheme("bearer")
-//                                        .bearerFormat("JWT"))
-                                .addSecuritySchemes("basicAuth",
-                                        new SecurityScheme()
-                                                .name("basicAuth")
-                                                .type(SecurityScheme.Type.HTTP)
-                                                .scheme("basic"))
+                        .addSecuritySchemes("basicAuth",
+                                new SecurityScheme()
+                                        .name("basicAuth")
+                                        .type(SecurityScheme.Type.HTTP)
+                                        .scheme("basic"))
                 );
 
     }

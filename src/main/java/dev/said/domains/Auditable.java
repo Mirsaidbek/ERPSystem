@@ -6,6 +6,7 @@ import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
 import org.springframework.data.annotation.CreatedBy;
 import org.springframework.data.annotation.LastModifiedBy;
+import org.springframework.data.jpa.repository.config.EnableJpaAuditing;
 
 import java.io.Serializable;
 import java.time.LocalDateTime;
@@ -16,11 +17,12 @@ import java.time.LocalDateTime;
 @ToString
 @Builder
 @MappedSuperclass
+@EnableJpaAuditing
 public class Auditable<ID extends Serializable> {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private ID id;
-
+// 167 6116
     @CreationTimestamp
     @Column(nullable = false, columnDefinition = "timestamp default now()")
     private LocalDateTime createdAt;

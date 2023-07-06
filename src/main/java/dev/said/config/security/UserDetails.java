@@ -16,7 +16,6 @@ public class UserDetails implements org.springframework.security.core.userdetail
     private final AuthUser authUser;
     private final Long id;
 
-
     public UserDetails(@NonNull AuthUser authUser) {
         this.authUser = authUser;
         this.id = authUser.getId();
@@ -61,5 +60,5 @@ public class UserDetails implements org.springframework.security.core.userdetail
         return id;
     }
 
-
+    public AuthUser getAuthUser(){return authUser;}
 }

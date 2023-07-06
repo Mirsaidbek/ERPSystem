@@ -1,14 +1,17 @@
 package dev.said.service;
 
+import dev.said.domains.EnterOut;
 import dev.said.domains.LeaveRequest;
 import dev.said.dto.leaverequest.CreateLeaveRequestDTO;
 import dev.said.enums.leaverequest.LeaveRequestStatus;
+import dev.said.repository.EnterOutRepository;
 import dev.said.repository.LeaveRequestRepository;
 import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
-import java.util.Date;
+import java.time.Duration;
+import java.time.LocalDateTime;
 import java.util.List;
 
 @Service
@@ -16,6 +19,7 @@ import java.util.List;
 public class EmployeeService {
 
     private final LeaveRequestRepository leaveRequestRepository;
+    private final EnterOutRepository enterOutRepository;
 
     public LeaveRequest createLeaveRequest(@NonNull CreateLeaveRequestDTO dto) {
 
@@ -29,6 +33,7 @@ public class EmployeeService {
     }
 
     public List<LeaveRequest> findAllByEmployeeId(Long employeeId) {
+
         return leaveRequestRepository.findAllByEmployeeId(employeeId)
                 .orElseThrow(() -> new RuntimeException("Leave Request for this employee id not found"));
     }
@@ -39,12 +44,67 @@ public class EmployeeService {
     }
 
 
-    public String makeEnter() {
-        return new Date().toString();
+    public EnterOut doEnter(Long userId) {
+
+        EnterOut enterOut = enterOutRepository.findLastByUserId(userId);
+
+        if (enterOut == null) {
+            return enterOutRepository.save(
+                    EnterOut.childBuilder()
+                            .userId(userId)
+                            .enteredAt(LocalDateTime.now())
+                            .build()
+            );
+        } else if (enterOut.getLeftAt().toString().equals(enterOut.getEnteredAt().toString())) {
+            throw new RuntimeException("User has not left the office yet");
+        } else {
+            return enterOutRepository.save(
+                    EnterOut.childBuilder()
+                            .userId(userId)
+                            .enteredAt(LocalDateTime.now())
+                            .build()
+            );
+        }
     }
 
 
-    public String makeExit() {
-        return new Date().toString();
+    public EnterOut doExit(@NonNull Long userId) {
+
+        EnterOut enterOut = enterOutRepository.findLastByUserId(userId);
+
+        if (enterOut == null) {
+            throw new RuntimeException("User has not enter the office yet");
+        }
+
+        if (!enterOut.getLeftAt().toString().equals(enterOut.getEnteredAt().toString())) {
+            throw new RuntimeException("User has not enter the office yet");
+        } else {
+            enterOut.setLeftAt(LocalDateTime.now());
+
+
+            LocalDateTime leftAt = enterOut.getLeftAt();
+
+            Duration duration = Duration.between(enterOut.getLeftAt(), enterOut.getEnteredAt());
+            long hours = duration.toHours();
+            long minutes = duration.toMinutesPart();
+
+            System.out.println("                        ===========================");
+            System.out.println("               ================================================");
+            System.out.println("        =================================================================");
+            System.out.println("==================================================================================");
+            System.out.println("                      Time difference: " + hours + " hours " + minutes + " minutes");
+            System.out.println("==================================================================================");
+            System.out.println("        =================================================================");
+            System.out.println("               ================================================");
+            System.out.println("                        ===========================");
+
+
+            return enterOutRepository.save(enterOut);
+        }
+    }
+
+    public static void main(String[] args) {
+        String string = LocalDateTime.now().toString().substring(0, 10);
+        System.out.println("string = " + string);
     }
 }
