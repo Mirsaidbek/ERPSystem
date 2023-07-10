@@ -18,6 +18,8 @@ import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
+
 @Service
 @RequiredArgsConstructor
 public class AuthService implements UserDetailsService {
@@ -106,5 +108,10 @@ public class AuthService implements UserDetailsService {
 
         return authUserRepository.findByUsername(username)
                 .orElseThrow(() -> new RuntimeException("Username or password not correct"));
+    }
+
+
+    public List<AuthUser> getAllUsers() {
+        return authUserRepository.findAll();
     }
 }
