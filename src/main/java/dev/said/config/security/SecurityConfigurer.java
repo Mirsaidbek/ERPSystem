@@ -49,37 +49,6 @@ public class SecurityConfigurer {
     private final SessionUser sessionUser;
     private final JwtUtils jwtUtils;
 
-
-//    @Bean
-//    public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
-//        return http
-//                .cors().configurationSource(corsConfigurationSource())
-//                .and()
-//                .csrf().disable()
-//                .authorizeHttpRequests()
-//                .antMatchers(
-//                        "/swagger-ui.html",
-//                        "/swagger-ui*/**",
-//                        "/swagger-ui*/*swagger-initializer.js",
-//                        "/api/v1/auth/**",
-//                        "/swagger-ui/index.html"
-////                        "/**"
-//                )
-//                .permitAll()
-//                .anyRequest()
-//                .fullyAuthenticated()
-//                .and()
-//                .sessionManagement()
-//                .sessionCreationPolicy(SessionCreationPolicy.STATELESS)
-//                .and()
-//                .exceptionHandling()
-//                .authenticationEntryPoint(authenticationEntryPoint())
-//                .accessDeniedHandler(accessDeniedHandler())
-//                .and()
-//                .addFilterBefore(new JwtFilter(jwtUtils, userDetailsService()), UsernamePasswordAuthenticationFilter.class)
-//                .build();
-//    }
-
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         return http
@@ -97,6 +66,9 @@ public class SecurityConfigurer {
                         new AntPathRequestMatcher("/api/v1/auth/**")
                 )
                 .permitAll()
+                .requestMatchers("/api/v1/admin/**").hasRole("ADMIN")
+                .requestMatchers("/api/v1/user/**").hasRole("USER")
+                .requestMatchers("/api/v1/employee/**").hasRole("EMPLOYEE")
                 .anyRequest()
                 .authenticated()
                 .and()

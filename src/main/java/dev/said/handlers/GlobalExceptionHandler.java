@@ -3,6 +3,7 @@ package dev.said.handlers;
 import dev.said.dto.AppErrorDTO;
 import jakarta.servlet.http.HttpServletRequest;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.validation.FieldError;
 import org.springframework.web.bind.MethodArgumentNotValidException;
@@ -50,5 +51,14 @@ public class GlobalExceptionHandler {
         String errorPath = request.getRequestURI();
         AppErrorDTO errorDTO = new AppErrorDTO(errorPath, errorMessage, errorBody, 500);
         return ResponseEntity.status(500).body(errorDTO);
+    }
+
+    @ExceptionHandler(AuthenticationException.class)
+    public ResponseEntity<AppErrorDTO> authenticationNeededException(RuntimeException e, HttpServletRequest request) {
+        String errorMessage = "Internal Server Error";
+        String errorBody = e.getMessage();
+        String errorPath = request.getRequestURI();
+        AppErrorDTO errorDTO = new AppErrorDTO(errorPath, errorMessage, errorBody, 401);
+        return ResponseEntity.status(401).body(errorDTO);
     }
 }

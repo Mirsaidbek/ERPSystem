@@ -23,7 +23,16 @@ public class UserDetails implements org.springframework.security.core.userdetail
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
+
+        System.out.println(">>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>");
+        System.out.println("===========================================================");
+        System.out.println("authUser.getRole() = " + authUser.getRole());
+        System.out.println("===========================================================");
+        System.out.println(">>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>");
+
+
         return Collections.singletonList(new SimpleGrantedAuthority("ROLE_" + authUser.getRole()));
+//        return Collections.singletonList(new SimpleGrantedAuthority(String.valueOf(authUser.getRole())));
     }
 
     @Override
@@ -60,5 +69,7 @@ public class UserDetails implements org.springframework.security.core.userdetail
         return id;
     }
 
-    public AuthUser getAuthUser(){return authUser;}
+    public AuthUser getAuthUser() {
+        return authUser;
+    }
 }

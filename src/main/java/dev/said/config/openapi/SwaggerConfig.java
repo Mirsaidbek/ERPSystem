@@ -19,7 +19,6 @@ import java.util.List;
 @Configuration
 public class SwaggerConfig {
 
-
     @Bean
     public WebMvcConfigurer corsConfigurer() {
         return new WebMvcConfigurer() {
@@ -30,6 +29,7 @@ public class SwaggerConfig {
             }
         };
     }
+
     @Bean
     public OpenAPI springOpenAPI() {
         return new OpenAPI()
@@ -51,12 +51,30 @@ public class SwaggerConfig {
                 .addSecurityItem(new SecurityRequirement()
                         .addList("bearerAuth"))
                 .components(new Components()
-                        .addSecuritySchemes("basicAuth",
+                        .addSecuritySchemes("bearerAuth",
                                 new SecurityScheme()
-                                        .name("basicAuth")
+                                        .name("bearerAuth")
                                         .type(SecurityScheme.Type.HTTP)
-                                        .scheme("basic"))
+                                        .scheme("bearer")
+                                        .bearerFormat("JWT"))
                 );
+//                .addSecurityItem(new SecurityRequirement()
+//                        .addList("bearerAuth")
+//                        .addList("basicAuth"))
+//                .components(new Components()
+//                        .addSecuritySchemes("bearerAuth",
+//                                new SecurityScheme()
+//                                        .name("bearerAuth")
+//                                        .type(SecurityScheme.Type.HTTP)
+//                                        .scheme("bearer")
+//                                        .bearerFormat("JWT"))
+//                        .addSecuritySchemes("basicAuth",
+//                                new SecurityScheme()
+//                                        .name("basicAuth")
+//                                        .type(SecurityScheme.Type.HTTP)
+//                                        .scheme("basic"))
+//                );
+
 
     }
 

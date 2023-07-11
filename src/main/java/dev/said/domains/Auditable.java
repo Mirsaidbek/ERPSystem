@@ -17,7 +17,7 @@ import java.time.LocalDateTime;
 @ToString
 @Builder
 @MappedSuperclass
-@EnableJpaAuditing
+@EnableJpaAuditing(auditorAwareRef = "auditorProvider")
 public class Auditable<ID extends Serializable> {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
