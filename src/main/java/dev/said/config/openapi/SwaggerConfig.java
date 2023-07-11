@@ -11,12 +11,25 @@ import io.swagger.v3.oas.models.servers.Server;
 import org.springdoc.core.models.GroupedOpenApi;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.web.servlet.config.annotation.CorsRegistry;
+import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 
 import java.util.List;
 
 @Configuration
 public class SwaggerConfig {
 
+
+    @Bean
+    public WebMvcConfigurer corsConfigurer() {
+        return new WebMvcConfigurer() {
+            @Override
+            public void addCorsMappings(CorsRegistry registry) {
+                registry.addMapping("/**")
+                        .allowedOrigins("*");
+            }
+        };
+    }
     @Bean
     public OpenAPI springOpenAPI() {
         return new OpenAPI()
@@ -83,6 +96,16 @@ public class SwaggerConfig {
                 .group("admin")
                 .pathsToMatch(
                         "/api/v1/admin/**"
+                )
+                .build();
+    }
+
+    @Bean
+    public GroupedOpenApi employee() {
+        return GroupedOpenApi.builder()
+                .group("employee")
+                .pathsToMatch(
+                        "/api/v1/employee/**"
                 )
                 .build();
     }

@@ -43,7 +43,6 @@ public class UserController {
         return ResponseEntity.ok(userService.getListLeaveRequests());
     }
 
-
     @PreAuthorize("hasRole('ROLE_USER')")
     @GetMapping("/pending-leaverequests")
     public ResponseEntity<List<LeaveRequest>> getPendingLeaveRequests() {

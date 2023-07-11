@@ -17,12 +17,11 @@ import java.time.LocalDateTime;
 @ToString
 @Builder
 @MappedSuperclass
-//@EnableJpaAuditing
+@EnableJpaAuditing
 public class Auditable<ID extends Serializable> {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private ID id;
-// 167 6116
     @CreationTimestamp
     @Column(nullable = false, columnDefinition = "timestamp default now()")
     private LocalDateTime createdAt;
@@ -36,7 +35,6 @@ public class Auditable<ID extends Serializable> {
 
     @Column(columnDefinition = "boolean default 'f'")
     private boolean deleted;
-
 
     public Auditable(ID id, LocalDateTime createdAt, LocalDateTime updatedAt, ID createdBy, ID updatedBy, boolean deleted) {
         this.id = id;

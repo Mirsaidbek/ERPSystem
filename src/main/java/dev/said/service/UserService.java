@@ -123,7 +123,7 @@ public class UserService {
 
         System.out.println("==================================================================================");
         System.out.println("==================================================================================");
-        System.out.println("            Worket tIme: " + hours + " hours " + minutes + " minutes " + seconds + " seconds");
+        System.out.println("            Worked tIme: " + hours + " hours " + minutes + " minutes " + seconds + " seconds");
         System.out.println("==================================================================================");
         System.out.println("==================================================================================");
 
@@ -155,7 +155,7 @@ public class UserService {
 
         System.out.println("*******************************************************************************");
         System.out.println("*******************************************************************************");
-        System.out.println("            Worket tIme: " + hours + " hours " + minutes + " minutes " + seconds + " seconds");
+        System.out.println("            Worked tIme: " + hours + " hours " + minutes + " minutes " + seconds + " seconds");
         System.out.println("*******************************************************************************");
         System.out.println("*******************************************************************************");
 

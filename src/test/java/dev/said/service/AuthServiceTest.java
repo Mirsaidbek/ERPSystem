@@ -52,7 +52,7 @@ class AuthServiceTest {
     }
 
     @Test
-//    @Disabled
+    @Disabled
     void canLoadUserByUsername() {
         //when
         underTest.loadUserByUsername("said");

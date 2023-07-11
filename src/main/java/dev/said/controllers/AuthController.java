@@ -29,12 +29,12 @@ public class AuthController {
     private final JwtUtils jwtUtils;
 
     @GetMapping("/token")
-    public ResponseEntity<TokenResponse> getToken(@Valid TokenRequest tokenRequest) {
+    public ResponseEntity<TokenResponse> getToken(@NonNull TokenRequest tokenRequest) {
         return ResponseEntity.ok(authService.generateToken(tokenRequest));
     }
 
     @PostMapping("/refresh")
-    public ResponseEntity<TokenResponse> refresh(@Valid RefreshTokenRequest refreshTokenRequest) {
+    public ResponseEntity<TokenResponse> refresh(@NonNull RefreshTokenRequest refreshTokenRequest) {
         return ResponseEntity.ok(authService.refreshToken(refreshTokenRequest));
     }
 
@@ -46,19 +46,19 @@ public class AuthController {
         return ResponseEntity.ok(authService.login(username, password));
     }
 
-    @PostMapping("/authenticate")
-    public ResponseEntity<String> authenticate(
-            @Valid TokenRequest dto
-    ) {
-        authenticationManager.authenticate(
-                new UsernamePasswordAuthenticationToken(dto.username(), dto.password())
-        );
-        final UserDetails user = userDetailsService.loadUserByUsername(dto.username());
-        if (user != null) {
-            return ResponseEntity.ok(String.valueOf(jwtUtils.generateToken(dto.username())));
-        }
-        return ResponseEntity.badRequest().body("Invalid username or password");
-    }
+//    @PostMapping("/authenticate")
+//    public ResponseEntity<String> authenticate(
+//            @Valid TokenRequest dto
+//    ) {
+//        authenticationManager.authenticate(
+//                new UsernamePasswordAuthenticationToken(dto.username(), dto.password())
+//        );
+//        final UserDetails user = userDetailsService.loadUserByUsername(dto.username());
+//        if (user != null) {
+//            return ResponseEntity.ok(String.valueOf(jwtUtils.generateToken(dto.username())));
+//        }
+//        return ResponseEntity.badRequest().body("Invalid username or password");
+//    }
 
     @PreAuthorize("hasAnyRole('ROLE_ADMIN','ROLE_USER','ROLE_EMPLOYEE')")
     @PutMapping("/reset-password")
