@@ -163,4 +163,3 @@ public class UserService {
         return "worked time between " + startDate.substring(0, 10) + " and " + endDate.substring(0, 10) + " is " + hours + " hours, " + minutes + " minutes, " + seconds + " seconds";
     }
 }
-// TODO: 23.06.2023   updateLeaveRequestStatus() ishlidimi yomi tekshirish kere
