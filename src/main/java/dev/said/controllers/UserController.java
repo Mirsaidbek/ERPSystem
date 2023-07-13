@@ -1,5 +1,6 @@
 package dev.said.controllers;
 
+import dev.said.domains.Document;
 import dev.said.domains.LeaveRequest;
 import dev.said.domains.User;
 import dev.said.dto.leaverequest.UpdateLeaveRequestStatusDTO;
@@ -9,9 +10,11 @@ import io.swagger.v3.oas.annotations.Parameter;
 import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
 import org.springdoc.core.annotations.ParameterObject;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.util.List;
 
@@ -86,6 +89,12 @@ public class UserController {
 
     ) {
         return ResponseEntity.ok(userService.getWorkedTimeWithInterval(userId, startDate, endDate));
+    }
+
+    @PutMapping(path = "/updatePicture", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
+    public ResponseEntity<Document> update(
+            @RequestPart("file") MultipartFile file) {
+        return ResponseEntity.ok(userService.updateProfilePicture(file));
     }
 
 }

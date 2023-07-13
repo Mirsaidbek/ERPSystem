@@ -8,6 +8,7 @@ import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.annotation.Bean;
 import org.springframework.data.domain.AuditorAware;
+import org.springframework.scheduling.annotation.EnableAsync;
 
 @SpringBootApplication
 @OpenAPIDefinition
@@ -17,6 +18,7 @@ import org.springframework.data.domain.AuditorAware;
         bearerFormat = "JWT",
         scheme = "bearer"
 )
+@EnableAsync
 public class Main {
     public static void main(String[] args) {
         SpringApplication.run(Main.class, args);

@@ -61,4 +61,14 @@ public class EmployeeController {
         return ResponseEntity.ok(employeeService.findLastRequestByEmployeeId(employeeId));
     }
 
+
+    @PreAuthorize("hasRole('ROLE_EMPLOYEE')")
+    @PutMapping("/update-profile-picture/{userId}")
+    public ResponseEntity<String> updateProfilePicture(
+            @PathVariable @NonNull Long userId,
+            @RequestParam @NonNull String profilePicture
+    ) {
+        return ResponseEntity.ok(employeeService.updateProfilePicture(userId, profilePicture));
+    }
+
 }

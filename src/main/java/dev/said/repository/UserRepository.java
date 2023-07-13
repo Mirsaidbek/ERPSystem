@@ -1,5 +1,6 @@
 package dev.said.repository;
 
+import dev.said.domains.Document;
 import dev.said.domains.User;
 import dev.said.dto.user.CreateUserDTO;
 import dev.said.enums.EmploymentModel;
@@ -44,5 +45,10 @@ public interface UserRepository extends JpaRepository<User, Long> {
             @Param("_salary") Long salary,
             @Param("_rmanager") Long aLong
     );
+
+    @Modifying
+    @Transactional
+    @Query("update User set picture = ?1 where authUserId = ?2")
+    void updateProfilePicture(Document file, Long id);
 
 }

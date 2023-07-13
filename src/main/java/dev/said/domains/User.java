@@ -59,5 +59,8 @@ public class User {
     @Column(nullable = false)
     private Long salary;
 
+    @OneToOne
+    private Document picture;
+
     private Long reportingManagerId;
 }

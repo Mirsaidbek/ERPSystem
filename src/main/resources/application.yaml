@@ -10,11 +10,11 @@ spring:
     properties:
       hibernate:
         format_sql: true
-  security:
-    user:
-      name: foo
-      password: foo
-
+  servlet:
+    multipart:
+      enabled: true
+      max-file-size: 100MB
+      max-request-size: 100MB
 
 
 jwt:
@@ -28,7 +28,5 @@ jwt:
       expiry: 864000000 # 10 days
       secret:
         key: 7134743777217A25432A462D4A614E645267556B58703272357538782F413F44
-server:
-  port: 8080
 
 

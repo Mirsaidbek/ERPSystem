@@ -1,22 +1,19 @@
 package dev.said.service;
 
-import dev.said.domains.AuthUser;
-import dev.said.domains.EnterOut;
-import dev.said.domains.LeaveRequest;
-import dev.said.domains.User;
+import dev.said.config.jwt.JwtUtils;
+import dev.said.config.security.SessionUser;
+import dev.said.domains.*;
 import dev.said.dto.leaverequest.UpdateLeaveRequestStatusDTO;
 import dev.said.dto.user.CreateUserDTO;
 import dev.said.enums.Active;
 import dev.said.enums.Language;
 import dev.said.enums.Role;
-import dev.said.repository.AuthUserRepository;
-import dev.said.repository.EnterOutRepository;
-import dev.said.repository.LeaveRequestRepository;
-import dev.said.repository.UserRepository;
+import dev.said.repository.*;
 import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.time.Duration;
 import java.util.List;
@@ -30,6 +27,10 @@ public class UserService {
     private final UserRepository userRepository;
     private final LeaveRequestRepository leaveRequestRepository;
     private final EnterOutRepository enterOutRepository;
+    private final DocumentService documentService;
+    private final JwtUtils jwtUtils;
+    private final SessionUser sessionUser;
+    private final DocumentRepository documentRepository;
 
     public User createEmployee(@NonNull CreateUserDTO dto) {
 
@@ -161,5 +162,18 @@ public class UserService {
 
 
         return "worked time between " + startDate.substring(0, 10) + " and " + endDate.substring(0, 10) + " is " + hours + " hours, " + minutes + " minutes, " + seconds + " seconds";
+    }
+
+    public Document updateProfilePicture(MultipartFile file) {
+        if (sessionUser.id() == -1) {
+            throw new RuntimeException("User not found");
+        }
+        if (file.isEmpty()) {
+            throw new RuntimeException("File not found");
+        }
+        Document picture = documentService.saveDocument(file);
+        userRepository.updateProfilePicture(picture, sessionUser.id());
+
+        return picture;
     }
 }

@@ -1,13 +1,18 @@
 package dev.said.service;
 
+import dev.said.config.security.SessionUser;
+import dev.said.domains.Document;
 import dev.said.domains.EnterOut;
 import dev.said.domains.LeaveRequest;
 import dev.said.dto.leaverequest.CreateLeaveRequestDTO;
 import dev.said.enums.leaverequest.LeaveRequestStatus;
+import dev.said.repository.DocumentRepository;
 import dev.said.repository.EnterOutRepository;
 import dev.said.repository.LeaveRequestRepository;
 import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import java.time.Duration;
@@ -20,6 +25,8 @@ public class EmployeeService {
 
     private final LeaveRequestRepository leaveRequestRepository;
     private final EnterOutRepository enterOutRepository;
+    private final SessionUser sessionUser;
+    private final DocumentRepository documentRepository;
 
     public LeaveRequest createLeaveRequest(@NonNull CreateLeaveRequestDTO dto) {
 
@@ -106,5 +113,16 @@ public class EmployeeService {
     public static void main(String[] args) {
         String string = LocalDateTime.now().toString().substring(0, 10);
         System.out.println("string = " + string);
+    }
+
+    public String updateProfilePicture(Long userId, String profilePicture) {
+        return "Hello";
+    }
+
+    public List<Document> getAllDocsBySessionUser() {
+        if (sessionUser.id() == -1) {
+            throw new RuntimeException("User not found");
+        }
+        return documentRepository.findAllByCreatedBy(sessionUser.id());
     }
 }
