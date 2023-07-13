@@ -20,20 +20,17 @@ public class EmployeeController {
 
     private final EmployeeService employeeService;
 
-    @PreAuthorize("hasRole('ROLE_EMPLOYEE')")
-    @PostMapping("/enter/{userId}")
-    public ResponseEntity<EnterOut> doEnter(
-            @PathVariable @NonNull Long userId
-    ) {
-        return ResponseEntity.ok(employeeService.doEnter(userId));
+    @PreAuthorize("hasAnyRole('ROLE_EMPLOYEE', 'ROLE_ADMIN', 'ROLE_USER')")
+    @PostMapping("/enter")
+    public ResponseEntity<EnterOut> doEnter() {
+        return ResponseEntity.ok(employeeService.doEnter());
     }
 
-    @PreAuthorize("hasRole('ROLE_EMPLOYEE')")
-    @PostMapping("/exit/{userId}")
+    @PreAuthorize("hasAnyRole('ROLE_EMPLOYEE', 'ROLE_ADMIN', 'ROLE_USER')")
+    @PostMapping("/exit")
     public ResponseEntity<EnterOut> doExit(
-            @PathVariable @NonNull Long userId
     ) {
-        return ResponseEntity.ok(employeeService.doExit(userId));
+        return ResponseEntity.ok(employeeService.doExit());
     }
 
     @PreAuthorize("hasRole('ROLE_EMPLOYEE')")
@@ -45,30 +42,25 @@ public class EmployeeController {
     }
 
     @PreAuthorize("hasRole('ROLE_EMPLOYEE')")
-    @GetMapping("/list-all-leaverequest/{employeeId}")
+    @PostMapping("/delete-leaverequest/{leaveRequestId}")
+    public ResponseEntity<LeaveRequest> createLeaveRequest(
+            @NonNull @PathVariable Long leaveRequestId
+    ) {
+        return ResponseEntity.ok(employeeService.deleteLeaveRequest(leaveRequestId));
+    }
+
+    @PreAuthorize("hasRole('ROLE_EMPLOYEE')")
+    @GetMapping("/list-all-leaverequest")
     public ResponseEntity<List<LeaveRequest>> getListAllLeaveRequest(
-            @NonNull @PathVariable Long employeeId
     ) {
-        return ResponseEntity.ok(employeeService.findAllByEmployeeId(employeeId));
+        return ResponseEntity.ok(employeeService.findAllByEmployeeId());
     }
 
-
     @PreAuthorize("hasRole('ROLE_EMPLOYEE')")
-    @GetMapping("/last-leaverequest/{employeeId}")
+    @GetMapping("/last-leaverequest")
     public ResponseEntity<LeaveRequest> getLastLeaveRequest(
-            @NonNull @PathVariable Long employeeId
     ) {
-        return ResponseEntity.ok(employeeService.findLastRequestByEmployeeId(employeeId));
-    }
-
-
-    @PreAuthorize("hasRole('ROLE_EMPLOYEE')")
-    @PutMapping("/update-profile-picture/{userId}")
-    public ResponseEntity<String> updateProfilePicture(
-            @PathVariable @NonNull Long userId,
-            @RequestParam @NonNull String profilePicture
-    ) {
-        return ResponseEntity.ok(employeeService.updateProfilePicture(userId, profilePicture));
+        return ResponseEntity.ok(employeeService.findLastRequestByEmployeeId());
     }
 
 }

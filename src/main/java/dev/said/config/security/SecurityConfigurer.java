@@ -16,6 +16,7 @@ import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.AuthenticationProvider;
 import org.springframework.security.authentication.dao.DaoAuthenticationProvider;
 import org.springframework.security.config.annotation.authentication.configuration.AuthenticationConfiguration;
+import org.springframework.security.config.annotation.method.configuration.EnableMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.http.SessionCreationPolicy;
@@ -42,6 +43,7 @@ import java.util.Optional;
 @EnableWebSecurity
 @EnableJpaAuditing(auditorAwareRef = "auditorAware")
 @RequiredArgsConstructor
+@EnableMethodSecurity
 public class SecurityConfigurer {
 
     private final AuthUserRepository authUserRepository;
@@ -66,9 +68,9 @@ public class SecurityConfigurer {
                         new AntPathRequestMatcher("/api/v1/auth/**")
                 )
                 .permitAll()
-                .requestMatchers("/api/v1/admin/**").hasRole("ADMIN")
-                .requestMatchers("/api/v1/user/**").hasRole("USER")
-                .requestMatchers("/api/v1/employee/**").hasRole("EMPLOYEE")
+//                .requestMatchers("/api/v1/admin/**").hasRole("ADMIN")
+//                .requestMatchers("/api/v1/user/**").hasRole("USER")
+//                .requestMatchers("/api/v1/employee/**").hasRole("EMPLOYEE")
                 .anyRequest()
                 .authenticated()
                 .and()

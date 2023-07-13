@@ -11,8 +11,6 @@ import dev.said.repository.EnterOutRepository;
 import dev.said.repository.LeaveRequestRepository;
 import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import java.time.Duration;
@@ -39,26 +37,39 @@ public class EmployeeService {
                 .build());
     }
 
-    public List<LeaveRequest> findAllByEmployeeId(Long employeeId) {
+    public List<LeaveRequest> findAllByEmployeeId() {
+        if (sessionUser.id() == -1) {
+            throw new RuntimeException("User not found");
+        }
 
-        return leaveRequestRepository.findAllByEmployeeId(employeeId)
+        return leaveRequestRepository.findAllByEmployeeId(sessionUser.id())
                 .orElseThrow(() -> new RuntimeException("Leave Request for this employee id not found"));
     }
 
-    public LeaveRequest findLastRequestByEmployeeId(Long employeeId) {
-        return leaveRequestRepository.findLastRequestByEmployeeId(employeeId)
+    public LeaveRequest findLastRequestByEmployeeId() {
+        if (sessionUser.id() == -1) {
+            throw new RuntimeException("User not found");
+        }
+
+        return leaveRequestRepository.findLastRequestByEmployeeId(sessionUser.id())
                 .orElseThrow(() -> new RuntimeException("Leave Request for this employee id not found"));
     }
 
 
-    public EnterOut doEnter(Long userId) {
+    public EnterOut doEnter() {
 
-        EnterOut enterOut = enterOutRepository.findLastByUserId(userId);
+        if (sessionUser.id() == -1) {
+            throw new RuntimeException("User not found");
+        }
+
+        Long sessionUserId = sessionUser.id();
+
+        EnterOut enterOut = enterOutRepository.findLastByUserId(sessionUserId);
 
         if (enterOut == null) {
             return enterOutRepository.save(
                     EnterOut.childBuilder()
-                            .userId(userId)
+                            .userId(sessionUserId)
                             .enteredAt(LocalDateTime.now())
                             .build()
             );
@@ -67,7 +78,7 @@ public class EmployeeService {
         } else {
             return enterOutRepository.save(
                     EnterOut.childBuilder()
-                            .userId(userId)
+                            .userId(sessionUserId)
                             .enteredAt(LocalDateTime.now())
                             .build()
             );
@@ -75,9 +86,15 @@ public class EmployeeService {
     }
 
 
-    public EnterOut doExit(@NonNull Long userId) {
+    public EnterOut doExit() {
 
-        EnterOut enterOut = enterOutRepository.findLastByUserId(userId);
+        if (sessionUser.id() == -1) {
+            throw new RuntimeException("User not found");
+        }
+
+        Long sessionUserId = sessionUser.id();
+
+        EnterOut enterOut = enterOutRepository.findLastByUserId(sessionUserId);
 
         if (enterOut == null) {
             throw new RuntimeException("User has not enter the office yet");
@@ -115,14 +132,13 @@ public class EmployeeService {
         System.out.println("string = " + string);
     }
 
-    public String updateProfilePicture(Long userId, String profilePicture) {
-        return "Hello";
-    }
 
-    public List<Document> getAllDocsBySessionUser() {
-        if (sessionUser.id() == -1) {
-            throw new RuntimeException("User not found");
-        }
-        return documentRepository.findAllByCreatedBy(sessionUser.id());
+
+    public LeaveRequest deleteLeaveRequest(Long leaveRequestId) {
+        LeaveRequest leaveRequest = leaveRequestRepository.findById(leaveRequestId)
+                .orElseThrow(() -> new RuntimeException("Leave Request not found"));
+
+        leaveRequest.setDeleted(true);
+        return leaveRequestRepository.save(leaveRequest);
     }
 }

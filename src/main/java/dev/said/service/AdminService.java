@@ -51,7 +51,7 @@ public class AdminService {
                 .hireDate(dto.hireDate())
                 .resignationDate(dto.resignationDate())
                 .probationPeriod(dto.probationPeriod())
-                .role(dto.role())
+                .userRole(dto.userRole())
                 .salary(dto.salary())
                 .reportingManagerId(dto.reportingManagerId())
                 .picture(document)
@@ -87,12 +87,26 @@ public class AdminService {
                 dto.hireDate(),
                 dto.resignationDate(),
                 dto.probationPeriod(),
-                dto.role(),
+                dto.userRole(),
                 dto.salary(),
                 dto.reportingManagerId()
         );
 
         return userRepository.findByEmailAndByFirstNameAndByLastName(dto.email(), dto.firstName(), dto.lastName())
                 .orElseThrow(() -> new RuntimeException("User with given email: %s, first name: %s and last name: %s  not found".formatted(dto.email(), dto.firstName(), dto.lastName())));
+    }
+
+    public User deleteUser(String username) {
+
+        AuthUser authUser = authUserRepository.findByUsername(username)
+                .orElseThrow(() -> new RuntimeException("User with given username: %s  not found".formatted(username)));
+
+        authUser.setDeleted(true);
+        authUserRepository.save(authUser);
+
+        userRepository.deleteByAuthUserId(authUser.getId());
+
+        return userRepository.findById(authUser.getId())
+                .orElseThrow(() -> new RuntimeException("User with given username: %s  not found".formatted(username)));
     }
 }

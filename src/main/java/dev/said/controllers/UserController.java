@@ -91,10 +91,21 @@ public class UserController {
         return ResponseEntity.ok(userService.getWorkedTimeWithInterval(userId, startDate, endDate));
     }
 
+    @PreAuthorize("hasAnyRole('ROLE_USER', 'ROLE_ADMIN', 'ROLE_EMPLOYEE')")
     @PutMapping(path = "/updatePicture", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
     public ResponseEntity<Document> update(
             @RequestPart("file") MultipartFile file) {
         return ResponseEntity.ok(userService.updateProfilePicture(file));
+    }
+
+    @PreAuthorize("hasAnyRole('ROLE_USER', 'ROLE_ADMIN')")
+
+    @PutMapping(path = "/updatePictureOfEmployee/{employeeId}", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
+    public ResponseEntity<Document> update(
+            @RequestPart("file") MultipartFile file,
+            @PathVariable @NonNull Long employeeId
+    ) {
+        return ResponseEntity.ok(userService.updateProfilePicture(file, employeeId));
     }
 
 }

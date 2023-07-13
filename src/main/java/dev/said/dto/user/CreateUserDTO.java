@@ -3,7 +3,7 @@ package dev.said.dto.user;
 import dev.said.enums.EmploymentModel;
 import dev.said.enums.Gender;
 import dev.said.enums.MartialStatus;
-import dev.said.enums.Role;
+import dev.said.enums.UserRole;
 import jakarta.validation.constraints.Pattern;
 import lombok.NonNull;
 import org.springdoc.core.annotations.ParameterObject;
@@ -25,7 +25,7 @@ public record CreateUserDTO(
         @NonNull String hireDate,
         @NonNull String resignationDate,
         @NonNull String probationPeriod,
-        @NonNull Role role,
+        @NonNull UserRole userRole,
         @NonNull Long salary,
         Long reportingManagerId
 ) {

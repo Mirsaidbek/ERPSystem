@@ -48,7 +48,6 @@ public class DocumentService {
         return documents;
     }
 
-    //    @Async
     public Document saveDocument(MultipartFile file) {
         if (sessionUser.id() == -1) {
             throw new RuntimeException("User not found");
@@ -69,8 +68,13 @@ public class DocumentService {
                 .build();
 
         System.out.println("doc = " + doc);
-
-//        documentRepository.save(doc);
         return documentRepository.save(doc);
     }
+
+//    public List<Document> getAllDocsBySessionUser() {
+//        if (sessionUser.id() == -1) {
+//            throw new RuntimeException("User not found");
+//        }
+//        return documentRepository.findAllByCreatedBy(sessionUser.id());
+//    }
 }

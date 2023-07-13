@@ -1,10 +1,7 @@
 package dev.said.domains;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
-import dev.said.enums.EmploymentModel;
-import dev.said.enums.Gender;
-import dev.said.enums.MartialStatus;
-import dev.said.enums.Role;
+import dev.said.enums.*;
 import jakarta.persistence.*;
 import lombok.*;
 
@@ -54,7 +51,7 @@ public class User {
     private String probationPeriod;
 
     @Enumerated(EnumType.STRING)
-    private Role role;
+    private UserRole userRole;
 
     @Column(nullable = false)
     private Long salary;
@@ -63,4 +60,7 @@ public class User {
     private Document picture;
 
     private Long reportingManagerId;
+
+    @Column(nullable = false, columnDefinition = "boolean default false")
+    private boolean deleted;
 }

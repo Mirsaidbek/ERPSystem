@@ -18,9 +18,6 @@ public interface AuthUserRepository extends JpaRepository<AuthUser, Long> {
     @Query("select a from AuthUser a where upper(a.username) = upper(?1)")
     Optional<AuthUser> findByUsername(String username);
 
-    @Query("select a from AuthUser a where upper(a.username) = upper(?1)")
-    AuthUser findByUsernameforConfig(String username);
-
     @Query("select a.id from AuthUser a where a.username = ?1")
     Long findAuthIdByUsername(String username);
 

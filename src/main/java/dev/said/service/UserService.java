@@ -43,6 +43,9 @@ public class UserService {
                 .build();
         AuthUser save = authUserRepository.save(authUser);
 
+        Document document = documentRepository.findById(1L)
+                .orElseThrow(() -> new RuntimeException("Document not found"));
+
         User user = User.builder()
                 .authUserId(save.getId())
                 .firstName(dto.firstName())
@@ -56,9 +59,10 @@ public class UserService {
                 .hireDate(dto.hireDate())
                 .resignationDate(dto.resignationDate())
                 .probationPeriod(dto.probationPeriod())
-                .role(dto.role())
+                .userRole(dto.userRole())
                 .salary(dto.salary())
                 .reportingManagerId(dto.reportingManagerId())
+                .picture(document)
                 .build();
 
 
@@ -89,13 +93,10 @@ public class UserService {
                 .orElseThrow(() -> new RuntimeException("Leave request not found"));
     }
 
-    public List<User> findAll() {
-        return userRepository.findAll();
-    }
 
     public List<LeaveRequest> getListLeaveRequests() {
 
-        return leaveRequestRepository.findAll();
+        return leaveRequestRepository.findAllNonDeletedLeaveRequests();
     }
 
     public String getWorkedTime(Long userId, String date) {
@@ -175,5 +176,34 @@ public class UserService {
         userRepository.updateProfilePicture(picture, sessionUser.id());
 
         return picture;
+    }
+
+    public List<User> findAll() {
+        return userRepository.findAllByDeletedFalseAndUserRole();
+    }
+
+    public Document updateProfilePicture(MultipartFile file, Long employeeId) {
+
+        if (file.isEmpty()) {
+            throw new RuntimeException("File not found");
+        }
+        Document picture = documentService.saveDocument(file);
+
+        userRepository.findById(employeeId)
+                .map(user -> {
+                    user.setPicture(picture);
+                    return userRepository.save(user);
+                })
+                .orElseThrow(() -> new RuntimeException("User not found"));
+
+        return picture;
+    }
+
+    public User findByUserName(String username) {
+        AuthUser authUser = authUserRepository.findByUsername(username)
+                .orElseThrow(() -> new RuntimeException("User not found"));
+
+        return userRepository.findById(authUser.getId())
+                .orElseThrow(() -> new RuntimeException("User not found"));
     }
 }
