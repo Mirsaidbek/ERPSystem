@@ -92,7 +92,7 @@ public class UserController {
     }
 
     @PreAuthorize("hasAnyRole('ROLE_USER', 'ROLE_ADMIN', 'ROLE_EMPLOYEE')")
-    @PutMapping(path = "/updatePicture", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
+    @PutMapping(path = "/update-picture", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
     public ResponseEntity<Document> update(
             @RequestPart("file") MultipartFile file) {
         return ResponseEntity.ok(userService.updateProfilePicture(file));
@@ -100,12 +100,18 @@ public class UserController {
 
     @PreAuthorize("hasAnyRole('ROLE_USER', 'ROLE_ADMIN')")
 
-    @PutMapping(path = "/updatePictureOfEmployee/{employeeId}", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
+    @PutMapping(path = "/update-picture-of-employee/{employeeId}", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
     public ResponseEntity<Document> update(
             @RequestPart("file") MultipartFile file,
             @PathVariable @NonNull Long employeeId
     ) {
         return ResponseEntity.ok(userService.updateProfilePicture(file, employeeId));
+    }
+
+    @PreAuthorize("hasAnyRole('ROLE_USER', 'ROLE_ADMIN', 'ROLE_EMPLOYEE')")
+    @GetMapping(path = "/get-picture")
+    public ResponseEntity<Document> getProfilePicture() {
+        return ResponseEntity.ok(userService.getProfilePicture());
     }
 
 }

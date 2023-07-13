@@ -206,4 +206,16 @@ public class UserService {
         return userRepository.findById(authUser.getId())
                 .orElseThrow(() -> new RuntimeException("User not found"));
     }
+
+    public Document getProfilePicture() {
+
+        if (sessionUser.id() == -1) {
+            throw new RuntimeException("User not found");
+        }
+
+        return userRepository.findById(sessionUser.id())
+                .map(User::getPicture)
+                .orElseThrow(() -> new RuntimeException("User not found"));
+
+    }
 }

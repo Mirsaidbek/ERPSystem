@@ -11,6 +11,7 @@ import org.springframework.web.multipart.MultipartFile;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 import static java.util.UUID.randomUUID;
 
@@ -70,6 +71,11 @@ public class DocumentService {
         System.out.println("doc = " + doc);
         return documentRepository.save(doc);
     }
+
+    public Optional<Document> getDocument(Long id) {
+        return documentRepository.findById(id);
+    }
+
 
 //    public List<Document> getAllDocsBySessionUser() {
 //        if (sessionUser.id() == -1) {

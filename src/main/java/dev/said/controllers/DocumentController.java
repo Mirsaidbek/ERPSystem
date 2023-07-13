@@ -5,13 +5,12 @@ import dev.said.service.DocumentService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestPart;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.util.List;
+
+import static org.springframework.data.jpa.domain.AbstractPersistable_.id;
 
 @RestController
 @RequiredArgsConstructor
@@ -26,6 +25,17 @@ public class DocumentController {
                 documentService.saveDocuments(files)
         );
     }
+
+    @GetMapping("/{id}")
+    public ResponseEntity<Document> getDocument(@PathVariable Long id){
+        return ResponseEntity.ok(
+                documentService.getDocument(id).orElseThrow(
+                        () -> new RuntimeException("Document not found")
+                )
+        );
+    }
+
+
 
 //    @PostMapping(name = "/uploadFile", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
 //    public ResponseEntity<Document> uploadDoc(@RequestPart("file") MultipartFile file) {
