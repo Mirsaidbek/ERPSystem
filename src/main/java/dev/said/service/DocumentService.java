@@ -68,7 +68,7 @@ public class DocumentService {
                 .path(mediaService.upload(file))
                 .build();
 
-        System.out.println("doc = " + doc);
+//        System.out.println("doc = " + doc);
         return documentRepository.save(doc);
     }
 

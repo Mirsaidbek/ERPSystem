@@ -125,7 +125,7 @@ public class UserService {
 
         System.out.println("==================================================================================");
         System.out.println("==================================================================================");
-        System.out.println("            Worked tIme: " + hours + " hours " + minutes + " minutes " + seconds + " seconds");
+        System.out.println("            Worked time: " + hours + " hours " + minutes + " minutes " + seconds + " seconds");
         System.out.println("==================================================================================");
         System.out.println("==================================================================================");
 
@@ -157,7 +157,7 @@ public class UserService {
 
         System.out.println("*******************************************************************************");
         System.out.println("*******************************************************************************");
-        System.out.println("            Worked tIme: " + hours + " hours " + minutes + " minutes " + seconds + " seconds");
+        System.out.println("            Worked time: " + hours + " hours " + minutes + " minutes " + seconds + " seconds");
         System.out.println("*******************************************************************************");
         System.out.println("*******************************************************************************");
 
@@ -216,6 +216,5 @@ public class UserService {
         return userRepository.findById(sessionUser.id())
                 .map(User::getPicture)
                 .orElseThrow(() -> new RuntimeException("User not found"));
-
     }
 }

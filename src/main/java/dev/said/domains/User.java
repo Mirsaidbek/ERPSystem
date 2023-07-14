@@ -59,6 +59,9 @@ public class User {
     @OneToOne
     private Document picture;
 
+    @OneToOne
+    private Document resume;
+
     private Long reportingManagerId;
 
     @Column(nullable = false, columnDefinition = "boolean default false")
