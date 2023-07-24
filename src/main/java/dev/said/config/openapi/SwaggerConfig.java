@@ -128,6 +128,18 @@ public class SwaggerConfig {
                 .build();
     }
 
+    @Bean
+    public GroupedOpenApi document() {
+        return GroupedOpenApi.builder()
+                .group("document")
+                .pathsToMatch(
+                        "/api/v1/document/**"
+                )
+                .build();
+    }
+
+
+
 
 }
 

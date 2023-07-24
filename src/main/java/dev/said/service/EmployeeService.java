@@ -7,7 +7,6 @@ import dev.said.domains.LeaveRequest;
 import dev.said.domains.User;
 import dev.said.dto.leaverequest.CreateLeaveRequestDTO;
 import dev.said.enums.leaverequest.LeaveRequestStatus;
-import dev.said.repository.DocumentRepository;
 import dev.said.repository.EnterOutRepository;
 import dev.said.repository.LeaveRequestRepository;
 import dev.said.repository.UserRepository;
@@ -27,7 +26,6 @@ public class EmployeeService {
     private final LeaveRequestRepository leaveRequestRepository;
     private final EnterOutRepository enterOutRepository;
     private final SessionUser sessionUser;
-    private final DocumentRepository documentRepository;
     private final UserRepository userRepository;
     private final DocumentService documentService;
 

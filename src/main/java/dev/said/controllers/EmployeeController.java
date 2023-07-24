@@ -26,7 +26,6 @@ public class EmployeeController {
 
     // working with employee enter/exit:
 
-
     @PreAuthorize("hasAnyRole('ROLE_EMPLOYEE', 'ROLE_ADMIN', 'ROLE_USER')")
     @PostMapping("/enter")
     public ResponseEntity<EnterOut> doEnter() {
@@ -58,6 +57,15 @@ public class EmployeeController {
     @PreAuthorize("hasRole('ROLE_EMPLOYEE')")
     @PostMapping("/delete-leaverequest/{leaveRequestId}")
     public ResponseEntity<LeaveRequest> createLeaveRequest(
+            @NonNull @PathVariable Long leaveRequestId
+    ) {
+        return ResponseEntity.ok(employeeService.deleteLeaveRequest(leaveRequestId));
+    }
+
+    //cancel  leave request
+    @PreAuthorize("hasRole('ROLE_EMPLOYEE')")
+    @PostMapping("/cancel-leaverequest/{leaveRequestId}")
+    public ResponseEntity<LeaveRequest> cancelLeaveRequest(
             @NonNull @PathVariable Long leaveRequestId
     ) {
         return ResponseEntity.ok(employeeService.deleteLeaveRequest(leaveRequestId));

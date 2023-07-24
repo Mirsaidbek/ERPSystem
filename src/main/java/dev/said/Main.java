@@ -29,7 +29,3 @@ public class Main {
         return () -> java.util.Optional.of(sessionUser == null ? -1L : sessionUser.id());
     }
 }
-
-// TODO: 11.07.2023 AuditorAware nimagadir ishlamayapti deb o'ylavomman, shuni to'g'irlash kere.
-// TODO: 11.07.2023 Hamma narsani ko'rib chiqish kere qatgadir yengi api lar qo'shish kerak bo'ladi. Masalan : LeaveRequestni cancel qilish -> deleted = true.
-
