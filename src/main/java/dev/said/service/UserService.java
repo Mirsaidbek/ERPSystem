@@ -59,7 +59,7 @@ public class UserService {
                 .hireDate(dto.hireDate())
                 .resignationDate(dto.resignationDate())
                 .probationPeriod(dto.probationPeriod())
-                .userRole(dto.userRole())
+                .position(dto.position())
                 .salary(dto.salary())
                 .reportingManagerId(dto.reportingManagerId())
                 .picture(document)
@@ -166,9 +166,8 @@ public class UserService {
     }
 
     public Document updateProfilePicture(MultipartFile file) {
-        if (sessionUser.id() == -1) {
-            throw new RuntimeException("User not found");
-        }
+        checkForSessionUserExistence(sessionUser.id());
+
         if (file.isEmpty()) {
             throw new RuntimeException("File not found");
         }
@@ -209,12 +208,21 @@ public class UserService {
 
     public Document getProfilePicture() {
 
-        if (sessionUser.id() == -1) {
-            throw new RuntimeException("User not found");
-        }
+        checkForSessionUserExistence(sessionUser.id());
 
         return userRepository.findById(sessionUser.id())
                 .map(User::getPicture)
-                .orElseThrow(() -> new RuntimeException("User not found"));
+                .orElseThrow(() -> new RuntimeException("User has not picture"));
+    }
+
+    public User updateEmployeeSalary(Long employeeId) {
+        checkForSessionUserExistence(sessionUser.id());
+        return null;
+    }
+
+    private void checkForSessionUserExistence(Long id) {
+        if (id == -1) {
+            throw new RuntimeException("User not found");
+        }
     }
 }

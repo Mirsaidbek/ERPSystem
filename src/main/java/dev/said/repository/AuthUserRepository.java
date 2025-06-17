@@ -26,4 +26,5 @@ public interface AuthUserRepository extends JpaRepository<AuthUser, Long> {
     @Query("update AuthUser a set a.language = coalesce(?2,a.language), a.active = coalesce(?3,a.active), a.role = coalesce(?4,a.role) where a.username = ?1")
     void updateAuthUser(String username, Language language, Active active, Role role);
 
+    boolean existsByUsername(String adminUsername);
 }

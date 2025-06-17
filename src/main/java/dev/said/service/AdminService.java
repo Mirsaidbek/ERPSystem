@@ -27,7 +27,7 @@ public class AdminService {
 
     public User createUser(@NonNull CreateUserDTO dto) {
 
-        Document document = documentRepository.findById(1L).orElseThrow(() -> new RuntimeException("Document not found"));
+        Document document = documentRepository.findById(1L).orElseThrow(() -> new RuntimeException("Document not found")); // document with id 1 is default profile picture for all new users
 
         AuthUser authUser = AuthUser.childBuilder()
                 .username(dto.email())
@@ -51,7 +51,7 @@ public class AdminService {
                 .hireDate(dto.hireDate())
                 .resignationDate(dto.resignationDate())
                 .probationPeriod(dto.probationPeriod())
-                .userRole(dto.userRole())
+                .position(dto.position())
                 .salary(dto.salary())
                 .reportingManagerId(dto.reportingManagerId())
                 .picture(document)
@@ -87,7 +87,7 @@ public class AdminService {
                 dto.hireDate(),
                 dto.resignationDate(),
                 dto.probationPeriod(),
-                dto.userRole(),
+                dto.position(),
                 dto.salary(),
                 dto.reportingManagerId()
         );

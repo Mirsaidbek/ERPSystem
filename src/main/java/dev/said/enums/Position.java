@@ -1,6 +1,6 @@
 package dev.said.enums;
 
-public enum UserRole {
+public enum Position {
     ADMINISTRATOR,
     DEVELOPER_BACKEND,
     DEVELOPER_FRONTEND,

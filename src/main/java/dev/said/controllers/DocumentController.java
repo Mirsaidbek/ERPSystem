@@ -10,8 +10,6 @@ import org.springframework.web.multipart.MultipartFile;
 
 import java.util.List;
 
-import static org.springframework.data.jpa.domain.AbstractPersistable_.id;
-
 @RestController
 @RequiredArgsConstructor
 @RequestMapping("/api/v1/document")
@@ -27,14 +25,13 @@ public class DocumentController {
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<Document> getDocument(@PathVariable Long id){
+    public ResponseEntity<Document> getDocument(@PathVariable Long id) {
         return ResponseEntity.ok(
                 documentService.getDocument(id).orElseThrow(
                         () -> new RuntimeException("Document not found")
                 )
         );
     }
-
 
 
 //    @PostMapping(name = "/uploadFile", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)

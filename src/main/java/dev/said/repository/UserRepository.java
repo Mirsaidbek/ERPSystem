@@ -2,7 +2,10 @@ package dev.said.repository;
 
 import dev.said.domains.Document;
 import dev.said.domains.User;
-import dev.said.enums.*;
+import dev.said.enums.EmploymentModel;
+import dev.said.enums.Gender;
+import dev.said.enums.MartialStatus;
+import dev.said.enums.Position;
 import jakarta.transaction.Transactional;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Modifying;
@@ -10,6 +13,7 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
+import java.time.LocalDate;
 import java.util.List;
 import java.util.Optional;
 
@@ -23,23 +27,23 @@ public interface UserRepository extends JpaRepository<User, Long> {
     @Modifying
     @Query("update User u set u.firstName=:_fname, u.lastName=:_lname, u.dateOfBirth=:_dob, u.gender=:_gender," +
             " u.martialStatus=:_mstatus, u.phoneNumber=:_number, u.email=:_email, u.employmentModel=:_emodel," +
-            " u.hireDate=:_hdate, u.resignationDate=:_rdate, u.probationPeriod=:_pperiod, u.userRole=:_role, u.salary=:_salary," +
+            " u.hireDate=:_hdate, u.resignationDate=:_rdate, u.probationPeriod=:_pperiod, u.position=:_role, u.salary=:_salary," +
             " u.reportingManagerId=:_rmanager where u.email=:_email and u.firstName=:_fname and u.lastName=:_lname")
     void updateUser(
-            @Param("_fname") String s,
-            @Param("_lname") String s1,
-            @Param("_dob") String s2,
+            @Param("_fname") String firstName,
+            @Param("_lname") String lastName,
+            @Param("_dob") LocalDate dateOfBirth,
             @Param("_gender") Gender gender,
             @Param("_mstatus") MartialStatus martialStatus,
-            @Param("_number") String s3,
+            @Param("_number") String phoneNumber,
             @Param("_email") String email,
             @Param("_emodel") EmploymentModel employmentModel,
-            @Param("_hdate") String s4,
-            @Param("_rdate") String s5,
-            @Param("_pperiod") String s6,
-            @Param("_role") UserRole role,
+            @Param("_hdate") LocalDate hireDate,
+            @Param("_rdate") LocalDate resignationDate,
+            @Param("_pperiod") String probationPeriod,
+            @Param("_role") Position position,
             @Param("_salary") Long salary,
-            @Param("_rmanager") Long aLong
+            @Param("_rmanager") Long reportingManagerId
     );
 
     @Modifying

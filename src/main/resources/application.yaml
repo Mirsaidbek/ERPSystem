@@ -1,3 +1,5 @@
+#server:
+#  port: 3030
 spring:
   datasource:
     url: jdbc:postgresql://localhost:5433/erp?currentSchema=erp
@@ -15,6 +17,10 @@ spring:
       enabled: true
       max-file-size: 100MB
       max-request-size: 100MB
+  jackson:
+    date-format: yyyy-MM-dd
+    serialization:
+      write-dates-as-timestamps: false
 
 
 jwt:

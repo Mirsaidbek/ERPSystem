@@ -21,7 +21,7 @@ import java.util.List;
 @RestController
 @RequiredArgsConstructor
 @RequestMapping("/api/v1/user")
-public class UserController {
+public class UserController { // this can be called hr management - User with USER role can be considered as a hr
 
     private final UserService userService;
 
@@ -75,7 +75,7 @@ public class UserController {
     @GetMapping("/get-worked-time/{userId}/{date}")
     public ResponseEntity<String> getWorkedTime(
             @PathVariable Long userId,
-            @PathVariable @Parameter(description = "date must be in the form of 'YYYY-MM-DD'", example = "2023-01-20") String date
+            @PathVariable @Parameter(description = "Date must be in the form of 'YYYY-MM-DD'", example = "2025-01-20") String date
     ) {
         return ResponseEntity.ok(userService.getWorkedTime(userId, date.concat(" __:__:__%")));
     }
@@ -112,6 +112,12 @@ public class UserController {
     @GetMapping(path = "/get-picture")
     public ResponseEntity<Document> getProfilePicture() {
         return ResponseEntity.ok(userService.getProfilePicture());
+    }
+
+    @PreAuthorize("hasRole('ROLE_USER')")
+    @PutMapping(path = "/update-employee-salary/{employeeId}")
+    public ResponseEntity<User> updateEmployeeSalary(@PathVariable Long employeeId) {
+        return ResponseEntity.ok(userService.updateEmployeeSalary(employeeId));
     }
 
 }
